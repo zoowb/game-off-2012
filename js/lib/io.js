@@ -71,6 +71,16 @@ function io()
     };
 
     /**
+     * Gets the inputs assigned to this object
+     *
+     * @return array
+     */
+    this.getInputs = function()
+    {
+        return _inputs;
+    };
+
+    /**
      * Adds a new input to the object. Essentially this adds subscribes
      * this object to the stateChange event of the input
      *

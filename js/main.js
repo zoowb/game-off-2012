@@ -11,4 +11,19 @@ gamejs.ready(function() {
 
 });
 
-require('lib/io');
+x = new io();
+y = new io();
+z = new notGate();
+
+and = new andGate();
+and.addInput(x);
+y.addOutput( z );
+and.addInput(z);
+
+x.setState(true);
+y.setState(true);
+
+alert(and.getState());
+
+y.setState(false);
+alert(and.getState());
