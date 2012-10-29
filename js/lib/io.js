@@ -49,7 +49,7 @@ function io()
      */
     this.setState = function(state)
     {
-        if ( !typeof(state) == 'boolean' )
+        if ( typeof(state) != 'boolean' )
         {
             throw 'State must be a boolean';
         }
@@ -96,7 +96,7 @@ function io()
      */
     this.addInput = function( input )
     {
-        if ( !typeof(input) == 'io' )
+        if ( typeof(input) != 'io' )
         {
             throw 'Input must be of type \'io\'';
         }
@@ -122,7 +122,7 @@ function io()
      */
     this.addOutput = function( output )
     {
-        if ( !typeof(output) == 'io' )
+        if ( typeof(output) != 'io' )
         {
             throw 'Output must be of type \'io\'';
         }
