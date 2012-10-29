@@ -11,19 +11,6 @@ gamejs.ready(function() {
 
 });
 
-x = new io();
-y = new io();
-z = new notGate();
-
-and = new andGate();
-and.addInput(x);
-y.addOutput( z );
-and.addInput(z);
-
-x.setState(true);
-y.setState(true);
-
-alert(and.getState());
-
-y.setState(false);
-alert(and.getState());
+var p = new player();
+p.clone();
+alert(p.getPlayables().length)
