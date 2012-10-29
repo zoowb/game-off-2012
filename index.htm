@@ -5,14 +5,9 @@
         <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
         <script type="text/javascript" src="js/gamejs/yabble.js"></script>
         <script type="text/javascript" src="js/gamejs/gamejs.min.js"></script>
-        <script type="text/javascript" src="js/lib/io.js"></script>
-        <script type="text/javascript" src="js/lib/gates/andGate.js"></script>
-        <script type="text/javascript" src="js/lib/gates/orGate.js"></script>
-        <script type="text/javascript" src="js/lib/gates/notGate.js"></script>
-        <script type="text/javascript" src="js/lib/playable.js"></script>
-        <script type="text/javascript" src="js/lib/player.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
+                var gamejs;
                 require.setModuleRoot('./js/');
                 require.run('main');
             });

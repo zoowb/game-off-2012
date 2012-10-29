@@ -1,4 +1,4 @@
-var gamejs = require('gamejs');
+gamejs = require('gamejs');
 
 // gamejs.preload([]);
 
@@ -9,8 +9,13 @@ gamejs.ready(function() {
         (new gamejs.font.Font('30px Sans-serif')).render('Hello World')
     );
 
-});
+    $('head').append('<script type="text/javascript" src="js/lib/io.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/gates/andGate.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/gates/orGate.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/gates/notGate.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/playable.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/player.js"></script>');
 
-var p = new player();
-p.clone();
-alert(p.getPlayables().length)
+    var p = new player();
+
+});

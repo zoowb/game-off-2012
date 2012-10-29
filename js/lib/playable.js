@@ -61,3 +61,5 @@ function playable()
         return { 'x':_velocityX, 'y':_velocityY };
     }
 }
+
+playable.prototype = new gamejs.sprite.Sprite();
