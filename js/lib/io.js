@@ -1,3 +1,9 @@
+/**
+ * Basic input/output class. Listens for state changes on the inputs and
+ * notifies outputs if a change happens
+ *
+ * @author David North
+ */
 function io()
 {
     /**
