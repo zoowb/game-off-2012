@@ -1,9 +1,21 @@
-
+/**
+ * Represents a player. Players have control over multiple playables, but only
+ * one playable at a time.
+ *
+ * @author David North
+ */
 function player()
 {
+    /**
+     * @var array An array of playables at the players disposal
+     */
     var _playables    = [new playable()];
+
+    /**
+     * @var int The current index of the playable currently under the
+     * players control
+     */
     var _currentIndex = 0;
-    var _jumping      = false;
 
     this.moveX = function( x )
     {
@@ -25,15 +37,30 @@ function player()
 
     }
 
+    /**
+     * Draws all of the playable objects to the surface
+     *
+     * @param object mainSurface
+     *
+     * @return player
+     */
     this.draw = function( mainSurface )
     {
         for ( var i = 0; i < _playables.length; i++ )
         {
             _playables[i].draw( mainSurface );
         }
+
+        return this;
     }
 
-    this.tabToNext = function()
+    /**
+     * Moves to the next available playable for control. If the last playable
+     * is selected then the first element is sed instead
+     *
+     * @return player
+     */
+    this.moveToNext = function()
     {
         if ( (_currentIndex + 1) == _playables.length )
         {
@@ -47,19 +74,35 @@ function player()
         return this;
     }
 
+    /**
+     * Gets all of the playables available to the player
+     *
+     * @return array
+     */
+    this.getPlayables = function()
+    {
+        return _playables;
+    }
+
+    /**
+     * Gets the current playable object that the player is in control of
+     *
+     * @return playable
+     */
     this.getCurrentPlayable = function()
     {
         return _playables[_currentIndex];
     }
 
+    /**
+     * Clones the current playable and adds it to the playables at the players
+     * disposal
+     *
+     * @return player
+     */
     this.clone = function()
     {
         _playables.push( jQuery.extend({}, _playables[_currentIndex]) );
         return this;
-    }
-
-    this.getPlayables = function()
-    {
-        return _playables;
     }
 }

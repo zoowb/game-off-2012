@@ -40,6 +40,11 @@ function playable()
     var _velocityY = 0.0;
 
     /**
+     * @var boolean Whether or not the playable is jumping
+     */
+    var _jumping      = false;
+
+    /**
      * Sets the X value of the playable (useful when initiating a new playable,
      * teleporting, etc)
      *
