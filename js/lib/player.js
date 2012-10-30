@@ -20,6 +20,19 @@ function player()
 
     }
 
+    this.update = function( msDuration )
+    {
+
+    }
+
+    this.draw = function( mainSurface )
+    {
+        for ( var i = 0; i < _playables.length; i++ )
+        {
+            _playables[i].draw( mainSurface );
+        }
+    }
+
     this.tabToNext = function()
     {
         if ( (_currentIndex + 1) == _playables.length )

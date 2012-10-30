@@ -1,6 +1,11 @@
 
 function playable()
 {
+    //Load the variables required by gamejs.sprite.Sprite
+    playable.superConstructor.apply(this, []);
+    this.image = gamejs.image.load('img/player.png');
+    this.rect = new gamejs.Rect([]);
+
     var _health    = 100;
     var _x         = 0.0;
     var _y         = 0.0;
@@ -62,4 +67,4 @@ function playable()
     }
 }
 
-playable.prototype = new gamejs.sprite.Sprite();
+gamejs.utils.objects.extend(playable, gamejs.sprite.Sprite);

@@ -1,13 +1,9 @@
 gamejs = require('gamejs');
-
-// gamejs.preload([]);
+gamejs.preload(['img/player.png']);
 
 gamejs.ready(function() {
 
     var display = gamejs.display.setMode([800, 600]);
-    display.blit(
-        (new gamejs.font.Font('30px Sans-serif')).render('Hello World')
-    );
 
     $('head').append('<script type="text/javascript" src="js/lib/io.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/gates/andGate.js"></script>');
@@ -18,4 +14,15 @@ gamejs.ready(function() {
 
     var p = new player();
 
+    var mainSurface = gamejs.display.getSurface();
+
+    // msDuration = time since last tick() call
+    var tick = function(msDuration) {
+        mainSurface.fill("#FFFFFF");
+        // update and draw the ships
+        p.update(msDuration);
+        p.draw(mainSurface);
+    };
+
+    gamejs.time.fpsCallback(tick, this, 60);
 });
