@@ -17,14 +17,17 @@ function player()
      */
     var _currentIndex = 0;
 
-    this.moveX = function( x )
+    this.setVelocity = function( x, y )
     {
+        var playable = this.getCurrentPlayable();
+        playable.setVelocity( x, y );
 
+        return this;
     }
 
-    this.moveY = function( y )
+    this.getVelocity = function()
     {
-
+        return this.getCurrentPlayable().getVelocity();
     }
 
     this.jump = function()
@@ -34,7 +37,12 @@ function player()
 
     this.update = function( msDuration )
     {
+        for ( var i = 0; i < _playables.length; i++ )
+        {
+            _playables[i].update( msDuration );
+        }
 
+        return this;
     }
 
     /**
@@ -102,7 +110,11 @@ function player()
      */
     this.clone = function()
     {
-        _playables.push( jQuery.extend({}, _playables[_currentIndex]) );
+        var clone = new playable();
+        clone.setX( this.getCurrentPlayable().getX() - 100 )
+
+        _playables.push( clone );
+
         return this;
     }
 }

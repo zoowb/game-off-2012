@@ -20,16 +20,6 @@ function playable()
     var _health    = 100;
 
     /**
-     * @var float The X position of this playable
-     */
-    var _x         = 0.0;
-
-    /**
-     * @var float The Y position of this playable
-     */
-    var _y         = 0.0;
-
-    /**
      * @var float The velocity left to right that the playable is experiencing
      */
     var _velocityX = 0.0;
@@ -59,7 +49,7 @@ function playable()
             throw 'Value for X must be a number';
         }
 
-        _x = x;
+        this.rect.x = x;
         return this;
     }
 
@@ -70,7 +60,7 @@ function playable()
      */
     this.getX = function()
     {
-        return _x;
+        return this.rect.x;
     }
 
     /**
@@ -88,7 +78,7 @@ function playable()
             throw 'Value for Y must be a number';
         }
 
-        _y = y;
+        this.rect.y = y;
         return this;
     }
 
@@ -99,7 +89,7 @@ function playable()
      */
     this.getY = function()
     {
-        return _y;
+        return this.rect.y;
     }
 
     /**
@@ -137,6 +127,14 @@ function playable()
     this.getVelocity = function()
     {
         return { 'x':_velocityX, 'y':_velocityY };
+    }
+
+    this.update = function( msDuration )
+    {
+        var distanceX = (this.getVelocity().x * (msDuration/1000));
+        var distanceY = (this.getVelocity().y * (msDuration/1000));
+
+        this.rect.moveIp( distanceX, distanceY );
     }
 }
 
