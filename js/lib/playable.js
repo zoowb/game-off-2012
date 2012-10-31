@@ -131,6 +131,22 @@ function playable()
         return { 'x':_velocityX, 'y':_velocityY };
     }
 
+    this.setJumping = function(jumping)
+    {
+        if ( typeof(jumping) != 'boolean' )
+        {
+            throw 'Jumping must be a boolean';
+        }
+
+        _jumping = jumping;
+        return this;
+    }
+
+    this.getJumping = function()
+    {
+        return _jumping;
+    }
+
     this.update = function( msDuration )
     {
         var distanceX = (this.getVelocity().x * (msDuration/1000));

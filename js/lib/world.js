@@ -20,8 +20,12 @@ function world()
             {
                 switch( event.key )
                 {
-                    case gamejs.event.K_UP:
-                    case gamejs.event.K_DOWN:
+                    case gamejs.event.K_SPACE:
+                        if ( !_p.getJumping() )
+                        {
+                            _p.setVelocity( _p.getVelocity().x, MIN_Y_VELOCITY );
+                            _p.setJumping(true);
+                        }
                         break;
 
                     case gamejs.event.K_LEFT:
@@ -55,9 +59,13 @@ function world()
 
     this.update = function( msDuration )
     {
+        //Apply the gravitational pull of the world, and then update the
+        //playables with their new positions
         _applyGravity();
-        _applyCollisions();
+        _p.update( msDuration );
 
+        //Apply the collision detection, and update the player positions again
+        _applyCollisions();
         _p.update( msDuration );
     }
 
@@ -70,6 +78,7 @@ function world()
     var _applyGravity = function()
     {
         _p.getPlayables().forEach(function(obj){
+            obj.setVelocity( obj.getVelocity().x, (obj.getVelocity().y + 10) )
             _sanatiseVelocity(obj);
         });
     }
@@ -95,16 +104,36 @@ function world()
             var playable = colliders[i].a;
             var block    = colliders[i].b;
 
+            var topEdge = [
+                [block.rect.left, block.rect.top], [block.rect.right, block.rect.top]
+            ];
+
+            var leftEdge = [
+                [block.rect.left, block.rect.top], [block.rect.left, block.rect.bottom]
+            ];
+
+            var rightEdge = [
+                [block.rect.right, block.rect.top], [block.rect.right, block.rect.bottom]
+            ];
+
+            if ( playable.getVelocity().y > 0
+                && playable.rect.collideLine(topEdge[0], topEdge[1])
+            )
+            {
+                playable.setVelocity( playable.getVelocity().x, 0 );
+                playable.rect.bottom = (block.rect.top - 0.25);
+                playable.setJumping(false);
+            }
+
             if ( playable.getVelocity().x > 0
-                && block.rect.left < playable.rect.right
-                && playable.rect.left < block.rect.left
+                && playable.rect.collideLine(leftEdge[0], leftEdge[1])
             )
             {
                 playable.setVelocity( 0, playable.getVelocity().y );
+
             }
             else if ( playable.getVelocity().x < 0
-                && block.rect.right > playable.rect.left
-                && playable.rect.right > block.rect.right
+                && playable.rect.collideLine(rightEdge[0], rightEdge[1])
             )
             {
                 playable.setVelocity( 0, playable.getVelocity().y );

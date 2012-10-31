@@ -31,9 +31,15 @@ function player()
         return this.getCurrentPlayable().getVelocity();
     }
 
-    this.jump = function()
+    this.setJumping = function(jumping)
     {
+        this.getCurrentPlayable().setJumping(jumping);
+        return this;
+    }
 
+    this.getJumping = function()
+    {
+        return this.getCurrentPlayable().getJumping();
     }
 
     this.update = function( msDuration )
