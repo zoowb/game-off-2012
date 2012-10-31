@@ -9,7 +9,8 @@ function player()
     /**
      * @var array An array of playables at the players disposal
      */
-    var _playables    = [new playable()];
+    var _playables = new gamejs.sprite.Group();
+    _playables.add( new playable() );
 
     /**
      * @var int The current index of the playable currently under the
@@ -37,11 +38,7 @@ function player()
 
     this.update = function( msDuration )
     {
-        for ( var i = 0; i < _playables.length; i++ )
-        {
-            _playables[i].update( msDuration );
-        }
-
+        _playables.update( msDuration );
         return this;
     }
 
@@ -54,11 +51,7 @@ function player()
      */
     this.draw = function( mainSurface )
     {
-        for ( var i = 0; i < _playables.length; i++ )
-        {
-            _playables[i].draw( mainSurface );
-        }
-
+        _playables.draw( mainSurface );
         return this;
     }
 
@@ -99,7 +92,7 @@ function player()
      */
     this.getCurrentPlayable = function()
     {
-        return _playables[_currentIndex];
+        return _playables.sprites()[_currentIndex];
     }
 
     /**
@@ -113,7 +106,7 @@ function player()
         var clone = new playable();
         clone.setX( this.getCurrentPlayable().getX() - 100 )
 
-        _playables.push( clone );
+        _playables.add( clone );
 
         return this;
     }

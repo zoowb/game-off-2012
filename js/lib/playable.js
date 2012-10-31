@@ -7,9 +7,11 @@
 function playable()
 {
     //Load the variables required by gamejs.sprite.Sprite
-    playable.superConstructor.apply(this, []);
+    playable.superConstructor.apply(this, [0, 0]);
     this.image = gamejs.image.load('img/player.png');
-    this.rect = new gamejs.Rect([]);
+
+    var _size = this.image.getSize();
+    this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
     //Load the variables that will be used to add additional functionality to
     //this sprite

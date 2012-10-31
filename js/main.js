@@ -1,5 +1,5 @@
 gamejs = require('gamejs');
-gamejs.preload(['img/player.png']);
+gamejs.preload(['img/player.png','img/block.png']);
 
 gamejs.ready(function() {
 
@@ -12,13 +12,15 @@ gamejs.ready(function() {
     $('head').append('<script type="text/javascript" src="js/lib/gates/orGate.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/gates/notGate.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/playable.js"></script>');
+    $('head').append('<script type="text/javascript" src="js/lib/block.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/player.js"></script>');
 
     var mainSurface = gamejs.display.getSurface();
     var lvl         = new world();
 
     // msDuration = time since last tick() call
-    var tick = function(msDuration) {
+    var tick = function(msDuration)
+    {
         mainSurface.fill("#FFFFFF");
 
         //Handle user input
