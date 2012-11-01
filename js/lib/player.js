@@ -31,6 +31,11 @@ function player()
         return this.getCurrentPlayable().getVelocity();
     }
 
+    this.getX = function()
+    {
+        return this.getCurrentPlayable().getX();
+    }
+
     this.setJumping = function(jumping)
     {
         this.getCurrentPlayable().setJumping(jumping);

@@ -18,6 +18,8 @@ gamejs.ready(function() {
     var mainSurface = gamejs.display.getSurface();
     var lvl         = new world();
 
+    lvl.init( mainSurface );
+
     // msDuration = time since last tick() call
     var tick = function(msDuration)
     {

@@ -7,10 +7,20 @@ function world()
     const MIN_X_VELOCITY = -200;
     const MIN_Y_VELOCITY = -200;
 
-    var _p = new player();
-    var _blocks = new gamejs.sprite.Group();
+    var _viewport = new gamejs.Rect([0, 0], [0, 0]);
+    var _level    = new gamejs.sprite.Sprite();
+    var _p        = new player();
+    var _blocks  = new gamejs.sprite.Group();
 
+    _level.rect = new gamejs.Rect([0, 0], [1000, 1000]);
     _blocks.add( new block() );
+
+    this.init = function( mainSurface )
+    {
+        _viewport.width  = mainSurface.getSize()[0];
+        _viewport.height = mainSurface.getSize()[1];
+
+    }
 
     this.handleInput = function()
     {
@@ -67,6 +77,7 @@ function world()
         //Apply the collision detection, including any minor amends to player
         //x and y positions
         _applyCollisions();
+        _moveViewport( msDuration );
     }
 
     this.draw = function ( mainSurface )
@@ -137,6 +148,59 @@ function world()
             )
             {
                 playable.setVelocity( 0, playable.getVelocity().y );
+            }
+        }
+    }
+
+    var _moveViewport = function( msDuration )
+    {
+        if ( _p.getVelocity().x != 0 )
+        {
+            var distanceX = ( _p.getVelocity().x * (msDuration/1000) );
+
+            var rightEdge = [
+                [_level.rect.right, _level.rect.top],
+                [_level.rect.right, _level.rect.bottom]
+            ];
+
+            var leftEdge = [
+                [_level.rect.left, _level.rect.top],
+                [_level.rect.left, _level.rect.bottom]
+            ];
+
+            var firstQuarter = (_viewport.left + ( _viewport.width / 100 * 25 ));
+            var lastQuarter = (_viewport.right - ( _viewport.width / 100 * 25 ));
+
+            if ( _p.getVelocity().x > 0
+                && _p.getX() > lastQuarter
+                && !_viewport.collideLine(rightEdge[0], rightEdge[1])
+            )
+            {
+                _level.rect.x -= distanceX;
+
+                _p.getPlayables().forEach(function(obj){
+                    obj.rect.x -= distanceX;
+                });
+
+                _blocks.forEach(function(obj){
+                    obj.rect.x -= distanceX;
+                });
+            }
+            else if (
+                _p.getVelocity().x < 0
+                && _p.getX() < firstQuarter
+                && !_viewport.collideLine(leftEdge[0], leftEdge[1])
+            )
+            {
+                _level.rect.x -= distanceX;
+
+                _p.getPlayables().forEach(function(obj){
+                    obj.rect.x -= distanceX;
+                });
+
+                _blocks.forEach(function(obj){
+                    obj.rect.x -= distanceX;
+                });
             }
         }
     }

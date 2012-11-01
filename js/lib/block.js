@@ -6,7 +6,7 @@ function block()
     this.image = gamejs.image.load('img/block.png');
 
     var _size = this.image.getSize();
-    this.rect = new gamejs.Rect([0, 100], [_size[0], _size[1]]);
+    this.rect = new gamejs.Rect([0, 100], [_size[0] + 900, _size[1]]);
 
     this.getX = function(){
         return this.rect.x;
