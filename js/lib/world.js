@@ -78,7 +78,7 @@ function world()
     var _applyGravity = function()
     {
         _p.getPlayables().forEach(function(obj){
-            obj.setVelocity( obj.getVelocity().x, (obj.getVelocity().y + 10) )
+            obj.setVelocity( obj.getVelocity().x, (obj.getVelocity().y + 5) )
             _sanatiseVelocity(obj);
         });
     }
