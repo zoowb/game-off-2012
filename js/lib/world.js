@@ -59,14 +59,14 @@ function world()
 
     this.update = function( msDuration )
     {
-        //Apply the gravitational pull of the world, and then update the
-        //playables with their new positions
+        //Apply the gravitational pull of the world, and update the
+        //player positions
         _applyGravity();
         _p.update( msDuration );
 
-        //Apply the collision detection, and update the player positions again
+        //Apply the collision detection, including any minor amends to player
+        //x and y positions
         _applyCollisions();
-        _p.update( msDuration );
     }
 
     this.draw = function ( mainSurface )
