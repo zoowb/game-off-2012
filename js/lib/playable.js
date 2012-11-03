@@ -13,9 +13,6 @@ function playable()
     var _size = this.image.getSize();
     this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
-    //Load the variables that will be used to add additional functionality to
-    //this sprite
-
     /**
      * @var int The amount of health the playable has
      */
@@ -129,22 +126,6 @@ function playable()
     this.getVelocity = function()
     {
         return { 'x':_velocityX, 'y':_velocityY };
-    }
-
-    this.setJumping = function(jumping)
-    {
-        if ( typeof(jumping) != 'boolean' )
-        {
-            throw 'Jumping must be a boolean';
-        }
-
-        _jumping = jumping;
-        return this;
-    }
-
-    this.getJumping = function()
-    {
-        return _jumping;
     }
 
     this.update = function( msDuration )

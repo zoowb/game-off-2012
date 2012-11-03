@@ -18,6 +18,14 @@ function player()
      */
     var _currentIndex = 0;
 
+    /**
+     * Sets the velocity of the current playable
+     *
+     * @param float x The X velocity
+     * @param float y The Y velocity
+     *
+     * @return player
+     */
     this.setVelocity = function( x, y )
     {
         var playable = this.getCurrentPlayable();
@@ -26,27 +34,24 @@ function player()
         return this;
     }
 
+    /**
+     * Returns an object taht contains the X and Y velocity of the current
+     * playable
+     *
+     * @return object
+     */
     this.getVelocity = function()
     {
         return this.getCurrentPlayable().getVelocity();
     }
 
-    this.getX = function()
-    {
-        return this.getCurrentPlayable().getX();
-    }
-
-    this.setJumping = function(jumping)
-    {
-        this.getCurrentPlayable().setJumping(jumping);
-        return this;
-    }
-
-    this.getJumping = function()
-    {
-        return this.getCurrentPlayable().getJumping();
-    }
-
+    /**
+     * Updates all of the playable objects
+     *
+     * @param int msDuration
+     *
+     * @return player
+     */
     this.update = function( msDuration )
     {
         _playables.update( msDuration );
@@ -74,7 +79,7 @@ function player()
      */
     this.moveToNext = function()
     {
-        if ( (_currentIndex + 1) == _playables.length )
+        if ( (_currentIndex + 1) == this.getPlayables().sprites().length )
         {
             _currentIndex = 0;
         }
@@ -103,7 +108,7 @@ function player()
      */
     this.getCurrentPlayable = function()
     {
-        return _playables.sprites()[_currentIndex];
+        return this.getPlayables().sprites()[_currentIndex];
     }
 
     /**
