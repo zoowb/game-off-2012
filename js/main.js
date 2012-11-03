@@ -1,11 +1,11 @@
 gamejs = require('gamejs');
-gamejs.preload(['img/player.png','img/block.png']);
+gamejs.preload(['img/player.png','img/block.png', 'img/blank.png']);
 
 gamejs.ready(function() {
 
     var display = gamejs.display.setMode([800, 600]);
 
-
+    $('head').append('<script type="text/javascript" src="js/lib/camera.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/world.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/io.js"></script>');
     $('head').append('<script type="text/javascript" src="js/lib/gates/andGate.js"></script>');

@@ -18,7 +18,10 @@ function world()
     //The minimum Y velocity a player can trvel (heading up)
     const MIN_Y_VELOCITY = -200;
 
-    var _viewport = new gamejs.Rect([0, 0], [0, 0]);
+    /**
+     * @var camera The camera to use
+     */
+    var _camera = new camera( this );
 
     /**
      * @var gamejs.sprite.Sprite Represents the bounding box (and background)
@@ -36,7 +39,7 @@ function world()
      * through (doors, blocks, etc)
      */
     var _collidables  = new gamejs.sprite.Group();
-
+    _collidables.add( new block() );
     /**
      * @var gamejs.sprite.Group Represents all objects that a player can walk
      * through (switches, backgrounds etc.)
@@ -53,10 +56,22 @@ function world()
     this.init = function( mainSurface )
     {
         _level.rect = new gamejs.Rect([0, 0], [1000, 1000]);
-        _viewport.width  = mainSurface.getSize()[0];
-        _viewport.height = mainSurface.getSize()[1];
+        _level.image = gamejs.image.load('img/blank.png');
+
+        _camera.setWidth( mainSurface.getSize()[0] );
+        _camera.setHeight( mainSurface.getSize()[1] );
 
         return this;
+    }
+
+    this.getBoundingRect = function()
+    {
+        return _level.rect;
+    }
+
+    this.getObjects = function()
+    {
+        return [ _p.getPlayables(), _collidables, _noncollidables ]
     }
 
     /**
@@ -143,6 +158,9 @@ function world()
 
         //Apply updates to the player and any objects in the world
         _p.update( msDuration );
+
+_camera.focusOn(_p.getCurrentPlayable().rect);
+
         _collidables.update( msDuration );
         _noncollidables.update( msDuration );
 
