@@ -1,34 +1,103 @@
-
+/**
+ * Represents the a camera, which is capable of panning around the world
+ *
+ * @author David North
+ */
 function camera( world )
 {
+    //The maximum speed that the camera can move at
     const MAX_VELOCITY = 200;
 
-    var _world     = world;
-    var _track     = false;
+    /**
+     * @var world The world that is being looked at
+     */
+    var _world = world;
+
+    /**
+     * @var boolean|gamejs.Rect Whether or not the camera is currently
+     * tracking an object. This variable contains the object being tracked if so.
+     */
+    var _track = false;
+
+    /**
+     * @var boolean Whether or not the camera is animating to position
+     */
     var _animating = false;
+
+    /**
+     * @var gamejs.Rect The size and position of the viewport
+     * (what the player can see)
+     */
     var _viewport  = new gamejs.Rect([0, 0], [0, 0]);
 
+    /**
+     * Sets the width of the viewport
+     *
+     * @param float width
+     *
+     * @return camera
+     */
     this.setWidth = function( width )
     {
+        if ( typeof(width) != 'number' )
+        {
+            throw 'Width must be a number';
+        }
+
         _viewport.width = width;
         return this;
     }
 
+    /**
+     * Sets the height of the viewport
+     *
+     * @param float height
+     *
+     * @return camera
+     */
     this.setHeight = function( height )
     {
+        if ( typeof(height) != 'number' )
+        {
+            throw 'Height must be a number';
+        }
+
         _viewport.height = height;
         return this;
     }
 
+    /**
+     * Sets the new position of the camera. Sanatises the position so that it
+     * never looks outside of the world
+     *
+     * @param float x
+     * @param float y
+     *
+     * @return camera
+     */
     this.setPosition = function( x, y )
     {
+        if ( typeof(x) != 'number' )
+        {
+            throw 'X position must be a number';
+        }
+
+        if ( typeof(y) != 'number' )
+        {
+            throw 'Y position must be a number';
+        }
+
+        //Get the last position that the camera was at before being moved
         var oldX = _viewport.x;
         var oldY = _viewport.y;
 
+        //Sanitise the position and set the camera
         var newPosition = _getSanatisedPosition(x, y);
         _viewport.x = newPosition.x;
         _viewport.y = newPosition.y;
 
+        //Update the objects in the world (i.e. shift them, the number of pixels
+        //the camera has 'moved', giving the impression of movement)
         _updateObjects((_viewport.x - oldX), (_viewport.y - oldY));
 
         return this;
