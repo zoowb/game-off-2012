@@ -25,7 +25,7 @@ function camera( world )
         _viewport.x = x;
         _viewport.y = y;
 
-        var newPosition = _getSanatisedPosition();
+        var newPosition = _getSanatisedPosition(x, y);
         _viewport.x = newPosition.x;
         _viewport.y = newPosition.y;
     
@@ -45,14 +45,10 @@ function camera( world )
             throw 'Optional animate flag must be a boolean';
         }
 
-        //Get the middle of the object to focus on
-        var rectMiddleX = rect.x + (rect.width / 2);
-        var rectMiddleY = rect.y + (rect.height / 2);
-
         //The new Camera position should have the middle of the camera pointing
         //at the middle of the object
-        var newCameraX = rectMiddleX - (_viewport.width / 2);
-        var newCameraY = rectMiddleY - (_viewport.height / 2);
+        var newCameraX = rect.center[0] - (_viewport.width / 2);
+        var newCameraY = rect.center[1] - (_viewport.height / 2);
 
         if ( !animate )
         {
@@ -119,16 +115,6 @@ function camera( world )
 
     var _updateObjects = function( distanceX, distanceY )
     {
-        if ( distanceX < 0)
-        {
-            distanceX *= -1;
-        }
-
-        if ( distanceY < 0 )
-        {
-            distanceY *= -1;
-        }
-
         var objects = _world.getObjects();
         for ( var i = 0; i < objects.length; i++)
         {
