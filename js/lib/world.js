@@ -60,6 +60,7 @@ function world()
 
         _camera.setWidth( mainSurface.getSize()[0] );
         _camera.setHeight( mainSurface.getSize()[1] );
+        _camera.focusOn(_p.getCurrentPlayable().rect, true);
 
         return this;
     }
@@ -121,6 +122,7 @@ function world()
                     //player can control
                     case gamejs.event.K_TAB:
                         _p.moveToNext();
+                        _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
                 }
             }
 
@@ -159,20 +161,18 @@ function world()
         //Apply updates to the player and any objects in the world
         _p.update( msDuration );
 
-_camera.focusOn(_p.getCurrentPlayable().rect);
-
         _collidables.update( msDuration );
         _noncollidables.update( msDuration );
+
+        //Apply the collision detection, including any minor amends to object
+        //x and y positions
+        _applyCollisions();
 
         //Update the level background with any animations or amends
         _level.update( msDuration );
 
         //Modify the camera position
         _camera.update ( msDuration );
-
-        //Apply the collision detection, including any minor amends to object
-        //x and y positions
-        _applyCollisions();
 
         return this;
     }
