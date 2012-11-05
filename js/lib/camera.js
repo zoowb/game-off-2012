@@ -103,8 +103,26 @@ function camera( world )
         return this;
     }
 
+    /**
+     * Focuses the camera on a rectangle, with the option to track it
+     * continuously and to animate the movement
+     *
+     * @param gamejs.Rect rect The rectangle to focus on
+     * @param boolean track Optional. Whether to track the object continuously
+     * @param boolean animate Optional. Whether to animate the camera or not
+     *
+     * @return camera
+     */
     this.focusOn = function( rect, track, animate )
     {
+        //Mmmmm.. type hinting
+        if ( !(rect instanceof gamejs.Rect) )
+        {
+            throw 'Rectangle must be an instance of gamejs.Rect';
+        }
+
+        //If track is not defined, then set the default value to false.
+        //Otherwise, ensure that it's a boolean
         if (typeof(track) === "undefined")
         {
             track = false;
@@ -114,6 +132,8 @@ function camera( world )
             throw 'Optional track flag must be a boolean';
         }
 
+        //If animate is not defined, then set the default value to false.
+        //Otherwise, ensure that it's a boolean
         if (typeof(animate) === "undefined")
         {
             animate = false;
@@ -124,10 +144,11 @@ function camera( world )
         }
 
         //The new Camera position should have the middle of the camera pointing
-        //at the middle of the object
+        //at the middle of the rectangle
         var newCameraX = rect.center[0] - (_viewport.width / 2);
         var newCameraY = rect.center[1] - (_viewport.height / 2);
 
+        //If we are contantly tracking this object, then set that here
         if ( track )
         {
             _track = rect;
@@ -137,31 +158,45 @@ function camera( world )
             _track = false;
         }
 
-        if ( !animate )
+        //If we are animating, don't move the camera (let the update method
+        //do it), otherwise set the position now
+        if ( animate )
         {
-            this.setPosition( newCameraX, newCameraY );
+            _animating = true;
         }
         else
         {
-            _animating = true;
+            this.setPosition( newCameraX, newCameraY );
         }
 
         return this;
     }
 
+    /**
+     * Updates the camera position if it is tracking and also moves the camera
+     * animation if animating
+     *
+     * @param int msDuration
+     */
     this.update = function( msDuration )
     {
         if ( _track )
         {
+            //Get the new X and Y c-ordinates, so that the camera is focused
+            //on the middle of the object
             var destinationX = _track.center[0] - (_viewport.width / 2);
             var destinationY = _track.center[1] - (_viewport.height / 2);
 
             destinationX += _viewport.x
             destinationY += _viewport.y
 
+            //If the tracking is animated then get the next frame, before
+            //setting the new position to that instead
             if ( _animating )
             {
-                var pos = _getNextAnimatedPosition(destinationX, destinationY, msDuration);
+                var pos = _getNextAnimatedPosition(
+                    destinationX, destinationY, msDuration
+                );
 
                 destinationX = pos.x;
                 destinationY = pos.y;
@@ -171,13 +206,28 @@ function camera( world )
         }
     }
 
+    /**
+     * Ensures that the camera is not intersecting the level (i.e. going over
+     * the bounding box). This is so that the camera is always focused on
+     * objects inside the level, not outside it
+     *
+     * @param float x The proposed X position
+     * @param float y The proposed Y position
+     *
+     * @return object An object containing the x and y position
+     */
     var _getSanatisedPosition = function( x, y )
     {
         var position = { 'x': x, 'y': y };
         var level    = _world.getBoundingRect();
 
-        var collideTest = new gamejs.Rect([x, y], [_viewport.width, _viewport.height]);
+        //Set up the collision test object (essentially a copy of the cameras
+        //viewport, with the new x and y co-ordinates)
+        var collideTest = new gamejs.Rect(
+            [x, y], [_viewport.width, _viewport.height]
+        );
 
+        //Set up the edges of trhe level to test collisions on
         var rightEdge = [
             [level.right, level.top],
             [level.right, level.bottom]
@@ -198,6 +248,7 @@ function camera( world )
             [level.right, level.bottom]
         ];
 
+        //Test the left and right edges, setting as appropriate
         if ( collideTest.collideLine(rightEdge[0], rightEdge[1]) )
         {
             position['x'] = level.right - collideTest.width;
@@ -207,6 +258,7 @@ function camera( world )
             position['x'] = level.left;
         }
 
+        //Test the top and bottom edges, setting as appropriate
         if ( collideTest.collideLine( topEdge[0], topEdge[1]) )
         {
             position['y'] = level.top;
@@ -219,8 +271,21 @@ function camera( world )
         return position;
     }
 
-    var _getNextAnimatedPosition = function( destinationX, destinationY, msDuration )
+    /**
+     * Gets the next frame for the camera animation
+     *
+     * @param float destinationX The target destination X position
+     * @param float destinationY Tha target destination Y position
+     * @param int msDuration The amount of time that has passed since the
+     * last frame
+     *
+     * @return object An object containing the new X and Y
+     */
+    var _getNextAnimatedPosition = function(
+        destinationX, destinationY, msDuration
+    )
     {
+        //Make sure that the new destination is not outside the world
         var sanePosition = _getSanatisedPosition(destinationX, destinationY);
 
         var position  = { 'x': sanePosition.x, 'y': sanePosition.y };
@@ -231,6 +296,24 @@ function camera( world )
         var deltaY    = _viewport.y - targetY;
         var velocityX = velocityY = MAX_VELOCITY;
 
+        //If the delta Y is zero, then the velocity is zero as the camera is
+        //not moving anywhere along the Y axis
+        if ( 0 === deltaY )
+        {
+            velocityY = 0;
+        }
+
+        //If the delta X is zero, then the velocity is zero as the camera is
+        //not moving anywhere along the X axis
+        if ( 0 === deltaX )
+        {
+            velocityX = 0;
+        }
+
+        //Find out if the difference on the X or Y axis is bigger and slow
+        //down the smaller of the two. This gives a nice diagonal effect so
+        //that the camera doesn't look like it's panning around trying to find
+        //the object
         if ( Math.abs(deltaX) > Math.abs(deltaY) )
         {
             if ( 0 != deltaY )
@@ -246,16 +329,8 @@ function camera( world )
             }
         }
 
-        if ( 0 === deltaY )
-        {
-            velocityY = 0;
-        }
-
-        if ( 0 === deltaX )
-        {
-            velocityX = 0;
-        }
-
+        //A small delta X means that the camera needs to move to the right, and
+        //a large delta means to move it to the left
         if ( deltaX < 0 )
         {
             position.x = _viewport.x + ( velocityX * (msDuration / 1000) );
@@ -265,6 +340,8 @@ function camera( world )
             position.x = _viewport.x - ( velocityX * (msDuration / 1000) );
         }
 
+        //A small delta X means that the camera needs to move down, and
+        //a large delta means to move it up
         if ( deltaY < 0 )
         {
             position.y = _viewport.y + ( velocityY * (msDuration / 1000) );
@@ -274,18 +351,23 @@ function camera( world )
             position.y = _viewport.y - ( velocityY * (msDuration / 1000) );
         }
 
-        if ( (position.x >= targetX + 10) || (position.x <= targetX - 10) )
+        //If the camera has reached it's target, then stop it animating
+        if ( targetX == position.x && targetY == position.y )
         {
-            if ( (position.y >= targetY + 10) || (position.y <= targetY - 10) )
-            {
-                position = { 'x': targetX, 'y': targetY };
-                _animating = false;
-            }
+            _animating = false;
         }
 
         return position;
     }
 
+    /**
+     * Updates all objects with their new position. This gives the illusion that
+     * the camera has moved, when in reality it's all the objects that
+     * have moved
+     *
+     * @param float distanceX The distance the camera has travelled on the X
+     * @param float distanceY The distance the camera has travelled on the Y
+     */
     var _updateObjects = function( distanceX, distanceY )
     {
         var objects = _world.getObjects();
