@@ -28,10 +28,13 @@ function playable()
      */
     var _velocityY = 0.0;
 
-    /**
-     * @var boolean Whether or not the playable is jumping
-     */
-    var _jumping      = false;
+    this.setPosition = function(x, y)
+    {
+        this.setX(x);
+        this.setY(y);
+
+        return this;
+    }
 
     /**
      * Sets the X value of the playable (useful when initiating a new playable,

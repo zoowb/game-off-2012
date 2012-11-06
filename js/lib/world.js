@@ -19,6 +19,11 @@ function world()
     const MIN_Y_VELOCITY = -200;
 
     /**
+     * @var boolean Whether the world has fully loaded
+     */
+    var _hasLoaded = false;
+
+    /**
      * @var camera The camera to use
      */
     var _camera = new camera( this );
@@ -39,7 +44,7 @@ function world()
      * through (doors, blocks, etc)
      */
     var _collidables  = new gamejs.sprite.Group();
-    _collidables.add( new block() );
+
     /**
      * @var gamejs.sprite.Group Represents all objects that a player can walk
      * through (switches, backgrounds etc.)
@@ -55,12 +60,24 @@ function world()
      */
     this.init = function( mainSurface )
     {
-        _level.rect = new gamejs.Rect([0, 0], [1000, 1000]);
+        _level.rect = new gamejs.Rect([0, 0], [0, 0]);
         _level.image = gamejs.image.load('img/blank.png');
 
         _camera.setWidth( mainSurface.getSize()[0] );
         _camera.setHeight( mainSurface.getSize()[1] );
-        _camera.focusOn(_p.getCurrentPlayable().rect, true);
+
+        $.ajax({
+            "url": "js/lib/levels/level_1.js",
+            "dataType": "json",
+            "success": function(data){
+                _loadLevel(data);
+                _camera.focusOn(_p.getCurrentPlayable().rect, true);
+                _hasLoaded = true;
+            },
+            "error": function(jqXHR, textStatus, errorThrown){
+                _errorMsg = errorThrown;
+            }
+        });
 
         return this;
     }
@@ -82,66 +99,69 @@ function world()
      */
     this.handleInput = function()
     {
-        //Loop through each game event (key presses mouse movements etc)
-        gamejs.event.get().forEach(function(event)
+        if ( _hasLoaded )
         {
-            //If a key has been pressed then check it to see if an
-            //action needs taking place
-            if ( event.type === gamejs.event.KEY_DOWN )
+            //Loop through each game event (key presses mouse movements etc)
+            gamejs.event.get().forEach(function(event)
             {
-                switch( event.key )
+                //If a key has been pressed then check it to see if an
+                //action needs taking place
+                if ( event.type === gamejs.event.KEY_DOWN )
                 {
-                    //The space key denotes a jump. The player is not allowed
-                    //to jump if they are already falling or jumping
-                    case gamejs.event.K_SPACE:
-                        if (  _p.getVelocity().y === 0 )
-                        {
-                            _p.setVelocity( _p.getVelocity().x, MIN_Y_VELOCITY );
-                        }
-                        break;
+                    switch( event.key )
+                    {
+                        //The space key denotes a jump. The player is not allowed
+                        //to jump if they are already falling or jumping
+                        case gamejs.event.K_SPACE:
+                            if (  _p.getVelocity().y === 0 )
+                            {
+                                _p.setVelocity( _p.getVelocity().x, MIN_Y_VELOCITY );
+                            }
+                            break;
 
-                    //The A key, or left arrow starts to move the player left
-                    case gamejs.event.K_a:
-                    case gamejs.event.K_LEFT:
-                        _p.setVelocity( MIN_X_VELOCITY, _p.getVelocity().y );
-                        break;
+                        //The A key, or left arrow starts to move the player left
+                        case gamejs.event.K_a:
+                        case gamejs.event.K_LEFT:
+                            _p.setVelocity( MIN_X_VELOCITY, _p.getVelocity().y );
+                            break;
 
-                    //The D key, or right arrow starts to move the player right
-                    case gamejs.event.K_d:
-                    case gamejs.event.K_RIGHT:
-                        _p.setVelocity( MAX_X_VELOCITY, _p.getVelocity().y );
-                        break;
+                        //The D key, or right arrow starts to move the player right
+                        case gamejs.event.K_d:
+                        case gamejs.event.K_RIGHT:
+                            _p.setVelocity( MAX_X_VELOCITY, _p.getVelocity().y );
+                            break;
 
-                    //The C key clones a playable, so that the player can use
-                    //that instead
-                    case gamejs.event.K_c:
-                        _p.clone();
-                        break;
+                        //The C key clones a playable, so that the player can use
+                        //that instead
+                        case gamejs.event.K_c:
+                            _p.clone();
+                            break;
 
-                    //The Tab key switches between the playables that the
-                    //player can control
-                    case gamejs.event.K_TAB:
-                        _p.moveToNext();
-                        _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
+                        //The Tab key switches between the playables that the
+                        //player can control
+                        case gamejs.event.K_TAB:
+                            _p.moveToNext();
+                            _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
+                    }
                 }
-            }
 
-            //At the moment, lifting the direction controlls stops the player
-            //dead. If we have time this should be changed to allow blocks
-            //to have drag
-            if ( event.type === gamejs.event.KEY_UP)
-            {
-                switch( event.key )
-                {   
-                    case gamejs.event.K_a:
-                    case gamejs.event.K_d:
-                    case gamejs.event.K_LEFT:
-                    case gamejs.event.K_RIGHT:
-                        _p.setVelocity( 0, _p.getVelocity().y );
-                        break;
+                //At the moment, lifting the direction controlls stops the player
+                //dead. If we have time this should be changed to allow blocks
+                //to have drag
+                if ( event.type === gamejs.event.KEY_UP)
+                {
+                    switch( event.key )
+                    {
+                        case gamejs.event.K_a:
+                        case gamejs.event.K_d:
+                        case gamejs.event.K_LEFT:
+                        case gamejs.event.K_RIGHT:
+                            _p.setVelocity( 0, _p.getVelocity().y );
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         return this;
     }
@@ -155,24 +175,27 @@ function world()
      */
     this.update = function( msDuration )
     {
-        //Apply the gravitational pull of the world
-        _applyGravity();
+        if ( _hasLoaded )
+        {
+            //Apply the gravitational pull of the world
+            _applyGravity();
 
-        //Apply updates to the player and any objects in the world
-        _p.update( msDuration );
+            //Apply updates to the player and any objects in the world
+            _p.update( msDuration );
 
-        _collidables.update( msDuration );
-        _noncollidables.update( msDuration );
+            _collidables.update( msDuration );
+            _noncollidables.update( msDuration );
 
-        //Apply the collision detection, including any minor amends to object
-        //x and y positions
-        _applyCollisions();
+            //Apply the collision detection, including any minor amends to object
+            //x and y positions
+            _applyCollisions();
 
-        //Update the level background with any animations or amends
-        _level.update( msDuration );
+            //Update the level background with any animations or amends
+            _level.update( msDuration );
 
-        //Modify the camera position
-        _camera.update ( msDuration );
+            //Modify the camera position
+            _camera.update ( msDuration );
+        }
 
         return this;
     }
@@ -184,16 +207,69 @@ function world()
      */
     this.draw = function ( mainSurface )
     {
-        //Draw the level, collidables and non collidables, as these need to be
-        //behind the player
-        _level.draw ( mainSurface );
-        _collidables.draw( mainSurface );
-        _noncollidables.draw( mainSurface );
+        if ( _hasLoaded )
+        {
+            //Draw the level, collidables and non collidables, as these need to be
+            //behind the player
+            _level.draw ( mainSurface );
+            _collidables.draw( mainSurface );
+            _noncollidables.draw( mainSurface );
 
-        //Draw the player at the forefront of the level
-        _p.draw( mainSurface );
+            //Draw the player at the forefront of the level
+            _p.draw( mainSurface );
+        }
 
         return this;
+    }
+
+    /**
+     * Loads the level data from an array, filling the worls with collidables
+     * and ensuring it's playable
+     */
+    var _loadLevel = function( data )
+    {
+        var _hasPlayer = false;
+        for ( var i = 0; i < data.length; i ++)
+        {
+            var xAmount = 1;
+            var yAmount = 1;
+
+            if ( typeof(data[i]['repeat-x']) != 'undefined')
+            {
+                xAmount = data[i]['repeat-x'];
+            }
+
+            if ( typeof(data[i]['repeat-y']) != 'undefined')
+            {
+                yAmount = data[i]['repeat-y'];
+            }
+
+            for ( var x = 1; x <= xAmount; x++ )
+            {
+                for ( var y = 1; y <= yAmount; y++ )
+                {
+                    switch ( data[i]['type'] )
+                    {
+                        case 'wall':
+                            var wall = new block();
+
+                            var width  = wall.image.getSize()[0];
+                            var height = wall.image.getSize()[1];
+
+                            var xPos = (data[i]['x'] + (width * x));
+                            var yPos = (data[i]['y'] + (height * y));
+
+                            wall.setPosition( xPos, yPos );
+                            _collidables.add( wall );
+                            break;
+                        case 'player':
+                            _p.getCurrentPlayable().setPosition(
+                                data[i]['x'], data[i]['y']
+                            );
+                    }
+                }
+            }
+        }
     }
 
     /**

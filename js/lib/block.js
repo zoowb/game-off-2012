@@ -2,14 +2,22 @@
 function block()
 {
     //Load the variables required by gamejs.sprite.Sprite
-    playable.superConstructor.apply(this, [0, 100]);
+    block.superConstructor.apply(this, [0, 0]);
     this.image = gamejs.image.load('img/block.png');
 
     var _size = this.image.getSize();
-    this.rect = new gamejs.Rect([0, 100], [_size[0] + 900, _size[1]]);
+    this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
-    this.getX = function(){
-        return this.rect.x;
+    this.setPosition = function(x, y)
+    {
+        this.rect.x = x;
+        this.rect.y = y;
+
+        return this;
+    }
+
+    this.getPosition = function(){
+        return {"x": this.rect.x, "y": this.rect.y};
     }
 }
 
