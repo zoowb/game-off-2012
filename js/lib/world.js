@@ -40,16 +40,10 @@ function world()
     var _p  = new player();
 
     /**
-     * @var gamejs.sprite.Group Represents all objects that a player can't walk
-     * through (doors, blocks, etc)
+     * @var gamejs.sprite.Group Represents all objects a player can
+     * interact with
      */
-    var _collidables  = new gamejs.sprite.Group();
-
-    /**
-     * @var gamejs.sprite.Group Represents all objects that a player can walk
-     * through (switches, backgrounds etc.)
-     */
-    var _noncollidables  = new gamejs.sprite.Group();
+    var _objects  = new gamejs.sprite.Group();
 
     /**
      * Main initiation method. Must be called before using the object
@@ -75,7 +69,7 @@ function world()
                 _hasLoaded = true;
             },
             "error": function(jqXHR, textStatus, errorThrown){
-                _errorMsg = errorThrown;
+                throw errorThrown;
             }
         });
 
@@ -89,7 +83,7 @@ function world()
 
     this.getObjects = function()
     {
-        return [ _p.getPlayables(), _collidables, _noncollidables ]
+        return [ _p.getPlayables(), _objects ]
     }
 
     /**
@@ -183,8 +177,7 @@ function world()
             //Apply updates to the player and any objects in the world
             _p.update( msDuration );
 
-            _collidables.update( msDuration );
-            _noncollidables.update( msDuration );
+            _objects.update( msDuration );
 
             //Apply the collision detection, including any minor amends to object
             //x and y positions
@@ -212,8 +205,7 @@ function world()
             //Draw the level, collidables and non collidables, as these need to be
             //behind the player
             _level.draw ( mainSurface );
-            _collidables.draw( mainSurface );
-            _noncollidables.draw( mainSurface );
+            _objects.draw( mainSurface );
 
             //Draw the player at the forefront of the level
             _p.draw( mainSurface );
@@ -226,7 +218,7 @@ function world()
      * Loads the level data from an array, filling the worls with collidables
      * and ensuring it's playable
      */
-    var _loadLevel = function( data )
+    var _loadLevel = function( data, input )
     {
         var _hasPlayer = false;
         for ( var i = 0; i < data.length; i ++)
@@ -244,28 +236,51 @@ function world()
                 yAmount = data[i]['repeat-y'];
             }
 
-            for ( var x = 1; x <= xAmount; x++ )
+            for ( var x = 0; x < xAmount; x++ )
             {
-                for ( var y = 1; y <= yAmount; y++ )
+                for ( var y = 0; y < yAmount; y++ )
                 {
+                    var obj = null;
+
                     switch ( data[i]['type'] )
                     {
                         case 'wall':
-                            var wall = new block();
-
-                            var width  = wall.image.getSize()[0];
-                            var height = wall.image.getSize()[1];
-
-                            var xPos = (data[i]['x'] + (width * x));
-                            var yPos = (data[i]['y'] + (height * y));
-
-                            wall.setPosition( xPos, yPos );
-                            _collidables.add( wall );
+                            obj = new block();
+                            _objects.add( obj );
+                            break;
+                        case 'lever':
+                            obj = new lever();
+                            _objects.add( obj );
+                            break;
+                        case 'door':
+                            obj = new door();
+                            _objects.add( obj );
                             break;
                         case 'player':
-                            _p.getCurrentPlayable().setPosition(
-                                data[i]['x'], data[i]['y']
-                            );
+                            obj = _p.getCurrentPlayable();
+                    }
+
+                    if ( null != obj )
+                    {
+                        if ( obj instanceof io )
+                        {
+                            if ( typeof(data[i]['outputs']) !== 'undefined' )
+                            {
+                                _loadLevel(data[i]['outputs'], obj)
+                            }
+
+                            if ( typeof(input) !== 'undefined' )
+                            {
+                                //obj.addInput(input);
+                            }
+                        }
+                        var width  = obj.image.getSize()[0];
+                        var height = obj.image.getSize()[1];
+
+                        var xPos = (data[i]['x'] + (width * x));
+                        var yPos = (data[i]['y'] + (height * y));
+
+                        obj.setPosition( xPos, yPos );
                     }
                 }
             }
@@ -316,7 +331,7 @@ function world()
     {
         //Check collision of playables against collidables
         var colliders = 
-            gamejs.sprite.groupCollide(_p.getPlayables(), _collidables);
+            gamejs.sprite.groupCollide(_p.getPlayables(), _objects);
 
         //Loop through all objects that have collided to check which edge they
         //collided with
