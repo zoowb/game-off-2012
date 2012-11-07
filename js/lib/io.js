@@ -21,6 +21,18 @@ function io()
      */
     var _outputs = [];
 
+    //Load the variables required by gamejs.sprite.Sprite
+    io.superConstructor.apply(this, [0, 0]);
+    this.image = gamejs.image.load('img/blank.png');
+    this.rect  = new gamejs.Rect([0,0]);
+
+    this.setPosition = function(x, y)
+    {
+        this.rect.x = x;
+        this.rect.y = y;
+        return this;
+    }
+
     /**
      * Private method fired when the state of the object has changed
      * (such as when a switch is pressed). Once the state has changed,
@@ -96,7 +108,7 @@ function io()
      */
     this.addInput = function( input )
     {
-        if ( typeof(input) != 'io' )
+        if ( !(input instanceof io) )
         {
             throw 'Input must be of type \'io\'';
         }
@@ -122,7 +134,7 @@ function io()
      */
     this.addOutput = function( output )
     {
-        if ( typeof(output) != 'io' )
+        if ( !(output instanceof io) )
         {
             throw 'Output must be of type \'io\'';
         }
@@ -138,3 +150,6 @@ function io()
         return this;
     };
 }
+
+//Some IOs need to be drawn. To deal with this, extend the sprite
+gamejs.utils.objects.extend(io, gamejs.sprite.Sprite);
