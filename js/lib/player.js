@@ -6,6 +6,18 @@
  */
 function player()
 {
+    //The maximum X velocity a player can trvel (heading right)
+    const MAX_X_VELOCITY = 200;
+
+    //The maximum Y velocity a player can trvel (heading down)
+    const MAX_Y_VELOCITY = 200;
+
+    //The minimum X velocity a player can trvel (heading left)
+    const MIN_X_VELOCITY = -200;
+
+    //The minimum Y velocity a player can trvel (heading up)
+    const MIN_Y_VELOCITY = -200;
+
     /**
      * @var array An array of playables at the players disposal
      */
@@ -17,6 +29,65 @@ function player()
      * players control
      */
     var _currentIndex = 0;
+
+    this.handleInput = function(event)
+    {
+        //If a key has been pressed then check it to see if an
+        //action needs taking place
+        if ( event.type === gamejs.event.KEY_DOWN )
+        {
+            switch( event.key )
+            {
+                //The space key denotes a jump. The player is not allowed
+                //to jump if they are already falling or jumping
+                case gamejs.event.K_SPACE:
+                    if (  this.getVelocity().y === 0 )
+                    {
+                        this.setVelocity( this.getVelocity().x, MIN_Y_VELOCITY );
+                    }
+                    break;
+
+                //The A key, or left arrow starts to move the player left
+                case gamejs.event.K_a:
+                case gamejs.event.K_LEFT:
+                    this.setVelocity( MIN_X_VELOCITY, this.getVelocity().y );
+                    break;
+
+                //The D key, or right arrow starts to move the player right
+                case gamejs.event.K_d:
+                case gamejs.event.K_RIGHT:
+                    this.setVelocity( MAX_X_VELOCITY, this.getVelocity().y );
+                    break;
+
+                //The C key clones a playable, so that the player can use
+                //that instead
+                case gamejs.event.K_c:
+                    this.clone();
+                    break;
+
+                //The Tab key switches between the playables that the
+                //player can control
+                case gamejs.event.K_TAB:
+                    this.moveToNext();
+            }
+        }
+
+        //At the moment, lifting the direction controlls stops the player
+        //dead. If we have time this should be changed to allow blocks
+        //to have drag
+        if ( event.type === gamejs.event.KEY_UP)
+        {
+            switch( event.key )
+            {
+                case gamejs.event.K_a:
+                case gamejs.event.K_d:
+                case gamejs.event.K_LEFT:
+                case gamejs.event.K_RIGHT:
+                    this.setVelocity( 0, this.getVelocity().y );
+                    break;
+            }
+        }
+    }
 
     /**
      * Sets the velocity of the current playable

@@ -96,64 +96,22 @@ function world()
         if ( _hasLoaded )
         {
             //Loop through each game event (key presses mouse movements etc)
-            gamejs.event.get().forEach(function(event)
-            {
-                //If a key has been pressed then check it to see if an
-                //action needs taking place
-                if ( event.type === gamejs.event.KEY_DOWN )
+            gamejs.event.get().forEach(function(event){
+                var _currentPlayer = _p.getCurrentPlayable();
+
+                _p.handleInput(event);
+
+                if ( _p.getCurrentPlayable() != _currentPlayer )
                 {
-                    switch( event.key )
-                    {
-                        //The space key denotes a jump. The player is not allowed
-                        //to jump if they are already falling or jumping
-                        case gamejs.event.K_SPACE:
-                            if (  _p.getVelocity().y === 0 )
-                            {
-                                _p.setVelocity( _p.getVelocity().x, MIN_Y_VELOCITY );
-                            }
-                            break;
-
-                        //The A key, or left arrow starts to move the player left
-                        case gamejs.event.K_a:
-                        case gamejs.event.K_LEFT:
-                            _p.setVelocity( MIN_X_VELOCITY, _p.getVelocity().y );
-                            break;
-
-                        //The D key, or right arrow starts to move the player right
-                        case gamejs.event.K_d:
-                        case gamejs.event.K_RIGHT:
-                            _p.setVelocity( MAX_X_VELOCITY, _p.getVelocity().y );
-                            break;
-
-                        //The C key clones a playable, so that the player can use
-                        //that instead
-                        case gamejs.event.K_c:
-                            _p.clone();
-                            break;
-
-                        //The Tab key switches between the playables that the
-                        //player can control
-                        case gamejs.event.K_TAB:
-                            _p.moveToNext();
-                            _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
-                    }
+                    _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
                 }
 
-                //At the moment, lifting the direction controlls stops the player
-                //dead. If we have time this should be changed to allow blocks
-                //to have drag
-                if ( event.type === gamejs.event.KEY_UP)
-                {
-                    switch( event.key )
+                _objects.forEach(function(obj){
+                    if ( typeof(obj.handleInput) == 'function' )
                     {
-                        case gamejs.event.K_a:
-                        case gamejs.event.K_d:
-                        case gamejs.event.K_LEFT:
-                        case gamejs.event.K_RIGHT:
-                            _p.setVelocity( 0, _p.getVelocity().y );
-                            break;
+                        obj.handleInput(event);
                     }
-                }
+                })
             });
         }
 
@@ -176,12 +134,7 @@ function world()
 
             //Apply updates to the player and any objects in the world
             _p.update( msDuration );
-
-            _objects.update( msDuration );
-
-            //Apply the collision detection, including any minor amends to object
-            //x and y positions
-            _applyCollisions();
+            _objects.update( msDuration, _p.getPlayables() );
 
             //Update the level background with any animations or amends
             _level.update( msDuration );
@@ -322,81 +275,5 @@ function world()
 
         //Update the players velocity
         obj.setVelocity( velocity.x, velocity.y );
-    }
-
-    /**
-     * Applies collision detection to all playables
-     */
-    var _applyCollisions = function()
-    {
-        //Check collision of playables against collidables
-        var colliders = 
-            gamejs.sprite.groupCollide(_p.getPlayables(), _objects);
-
-        //Loop through all objects that have collided to check which edge they
-        //collided with
-        for( var i = 0; i < colliders.length; i++ )
-        {
-            //Set up the colliding obvjects
-            var playable = colliders[i].a;
-            var block    = colliders[i].b;
-
-            //Define the top edge (left to right, along the top of the
-            //colliding block)
-            var topEdge = [
-                [block.rect.left, block.rect.top],
-                [block.rect.right, block.rect.top]
-            ];
-
-            //Define the top edge (left to right, along the bottom of the
-            //colliding block)
-            var bottomEdge = [
-                [block.rect.left, block.rect.bottom],
-                [block.rect.right, block.rect.bottom]
-            ];
-
-            //Define the left edge (top to bottom, along the left of the
-            //colliding block)
-            var leftEdge = [
-                [block.rect.left, block.rect.top],
-                [block.rect.left, block.rect.bottom]
-            ];
-
-            //Define the right edge (top to bottom, along the right of the
-            //colliding block)
-            var rightEdge = [
-                [block.rect.right, block.rect.top],
-                [block.rect.right, block.rect.bottom]
-            ];
-
-            //Check the top and bottom colliision points. If a collision is
-            //detected then set the velocity on the Y axis to zero and move
-            //the playable so that it is no longer colliding
-            if ( playable.rect.collideLine(topEdge[0], topEdge[1]) )
-            {
-                playable.setVelocity( playable.getVelocity().x, 0 );
-                playable.rect.bottom = (block.rect.top - 0.1);
-            }
-            else if ( playable.rect.collideLine(bottomEdge[0], bottomEdge[1]) )
-            {
-                playable.setVelocity( playable.getVelocity().x, 0 );
-                playable.rect.top = (block.rect.bottom + 0.1);
-            }
-
-            //Check the left and right colliision points. If a collision is
-            //detected then set the velocity on the X axis to zero and move
-            //the playable so that it is no longer colliding
-            if ( playable.rect.collideLine(leftEdge[0], leftEdge[1]) )
-            {
-                playable.setVelocity( 0, playable.getVelocity().y );
-                playable.rect.right = (block.rect.left - 0.1);
-
-            }
-            else if ( playable.rect.collideLine(rightEdge[0], rightEdge[1]) )
-            {
-                playable.setVelocity( 0, playable.getVelocity().y );
-                playable.rect.left = (block.rect.right + 0.1);
-            }
-        }
     }
 }
