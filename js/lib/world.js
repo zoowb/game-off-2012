@@ -86,6 +86,11 @@ function world()
         return [ _p.getPlayables(), _objects ]
     }
 
+    this.getPlayer = function()
+    {
+        return _p;
+    }
+
     /**
      * Handles user input and modifies the world objects accordingly
      *
@@ -95,6 +100,8 @@ function world()
     {
         if ( _hasLoaded )
         {
+            var self = this;
+
             //Loop through each game event (key presses mouse movements etc)
             gamejs.event.get().forEach(function(event){
                 var _currentPlayer = _p.getCurrentPlayable();
@@ -109,7 +116,7 @@ function world()
                 _objects.forEach(function(obj){
                     if ( typeof(obj.handleInput) == 'function' )
                     {
-                        obj.handleInput(event);
+                        obj.handleInput(self, event);
                     }
                 })
             });

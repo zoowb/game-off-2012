@@ -27,7 +27,23 @@ function lever()
         }
 
         //Update the state using the parent setState method
-        andGate.prototype.setState.call(this, state);
+        lever.prototype.setState.call(this, state);
+    }
+
+    this.handleInput = function(world, event){
+        var playable = world.getPlayer().getCurrentPlayable();
+
+        if ( event.type === gamejs.event.KEY_DOWN
+            && gamejs.sprite.collideRect(playable, this) )
+        {
+            switch( event.key )
+            {
+                case gamejs.event.K_e:
+                case gamejs.event.K_ENTER:
+                    this.setState( !this.getState() );
+                    break;
+            }
+        }
     }
 }
 
