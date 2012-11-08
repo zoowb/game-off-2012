@@ -10,6 +10,24 @@ function door()
 
     var _size = this.image.getSize();
     this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
+
+    this.setState = function( state )
+    {
+        if ( state != this.getState() )
+        {
+            if ( state )
+            {
+                this.rect.y -= (this.rect.height);
+            }
+            else
+            {
+                this.rect.y += (this.rect.height);
+            }
+        }
+
+        //Update the state using the parent setState method
+        door.prototype.setState.call(this, state);
+    }
 }
 
 //Set the parent of the orGate to io

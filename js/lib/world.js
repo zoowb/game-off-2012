@@ -231,7 +231,7 @@ function world()
 
                             if ( typeof(input) !== 'undefined' )
                             {
-                                //obj.addInput(input);
+                                obj.addInput(input);
                             }
                         }
                         var width  = obj.image.getSize()[0];

@@ -120,7 +120,7 @@ function io()
             _inputs.push(input);
             input.addOutput(this);   
         }
-        
+
         return this;
     };
 
