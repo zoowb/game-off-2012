@@ -141,7 +141,18 @@ function world()
 
             //Apply updates to the player and any objects in the world
             _p.update( msDuration );
-            _objects.update( msDuration, _p.getPlayables() );
+            _objects.update( msDuration );
+
+            var colliders =
+                gamejs.sprite.groupCollide(_p.getPlayables(), _objects);
+
+            for( var i = 0; i < colliders.length; i++ )
+            {
+                if ( typeof(colliders[i].b.handleCollision) == 'function' )
+                {
+                    colliders[i].b.handleCollision( colliders[i].a );
+                }
+            }
 
             //Update the level background with any animations or amends
             _level.update( msDuration );
