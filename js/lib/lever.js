@@ -6,6 +6,7 @@
  */
 function lever()
 {
+    var _canBeOn = false;
 
     this.image = gamejs.image.load('img/switch.png');
     this.image.crop( new gamejs.Rect([0,0], [64,64] ));
@@ -28,6 +29,19 @@ function lever()
 
         //Update the state using the parent setState method
         lever.prototype.setState.call(this, state);
+    }
+
+    this.update = function(){
+        if ( !_canBeOn )
+        {
+            this.setState(false);
+        }
+
+        _canBeOn = false;
+    }
+
+    this.handleCollision = function( playable ){
+        _canBeOn = true;
     }
 
     this.handleInput = function(world, event){
