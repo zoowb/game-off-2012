@@ -20,7 +20,9 @@ gamejs.ready(function() {
         }
 
         this.clear();
-        this.blit( this._originalImg, rect, rect);
+
+        var newPos = new gamejs.Rect([0,0], [rect.width, rect.height]);
+        this.blit( this._originalImg, newPos, rect);
     }
 
     $('head').append('<script type="text/javascript" src="js/lib/camera.js"></script>');
