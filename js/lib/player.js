@@ -69,22 +69,6 @@ function player()
                     this.moveToNext();
             }
         }
-
-        //At the moment, lifting the direction controlls stops the player
-        //dead. If we have time this should be changed to allow blocks
-        //to have drag
-        if ( event.type === gamejs.event.KEY_UP)
-        {
-            switch( event.key )
-            {
-                case gamejs.event.K_a:
-                case gamejs.event.K_d:
-                case gamejs.event.K_LEFT:
-                case gamejs.event.K_RIGHT:
-                    this.setVelocity( 0, this.getVelocity().y );
-                    break;
-            }
-        }
     }
 
     /**

@@ -18,8 +18,13 @@ gamejs.Surface.prototype.crop = function ( rect )
     this.blit( this._originalImg, newPos, rect);
 }
 
-function playerCollides(playable, rect)
+function playerCollides(playable, rect, drag)
 {
+    if ( typeof(drag) == 'undefined' )
+    {
+        drag = 50;
+    }
+
     //Define the top edge (left to right, along the top of the
     //colliding block)
     var topEdge = [ [rect.left, rect.top], [rect.right, rect.top] ];
@@ -41,7 +46,16 @@ function playerCollides(playable, rect)
     //the playable so that it is no longer colliding
     if ( playable.rect.collideLine(topEdge[0], topEdge[1]) )
     {
-        playable.setVelocity( playable.getVelocity().x, 0 );
+        var newX = playable.getVelocity().x;
+        if (newX < 0 )
+        {
+            newX += drag;
+        }
+        else if ( newX > 0 )
+        {
+            newX -= drag;
+        }
+        playable.setVelocity( newX, 0 );
         playable.rect.bottom = (rect.top - 0.1);
         playable.setMovement('walk');
     }
