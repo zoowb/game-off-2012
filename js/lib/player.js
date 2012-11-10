@@ -190,8 +190,11 @@ function player()
      */
     this.clone = function()
     {
-        var clone = new playable();
-        clone.setX( this.getCurrentPlayable().getX() - 100 )
+        var template = this.getCurrentPlayable();
+        var clone    = new playable();
+        var newX     = ( template.getX() - template.rect.width );
+
+        clone.setPosition(newX, template.getY());
 
         _playables.add( clone );
 
