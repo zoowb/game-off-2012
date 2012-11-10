@@ -190,7 +190,7 @@ function player()
     {
         var template = this.getCurrentPlayable();
         var clone    = new playable();
-        var newX     = ( template.getX() - template.rect.width );
+        var newX     = ( template.getX() - (template.rect.width * 2) );
 
         clone.setPosition(newX, template.getY() - template.image.getSize()[1]);
 
