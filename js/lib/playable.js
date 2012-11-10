@@ -42,6 +42,10 @@ function playable()
                     break;
                 case 'jump':
                     this.image.crop( new gamejs.Rect([0,55], [46,69] ));
+                    break;
+                case 'fall':
+                    this.image.crop( new gamejs.Rect([46,55], [46,69] ));
+                    break;
             }
 
             var _size        = this.image.getSize();
@@ -163,6 +167,11 @@ function playable()
         if ( _moveType == '' )
         {
             this.setMovement('walk');
+        }
+
+        if ( this.getVelocity().y > 0 )
+        {
+            this.setMovement('fall');
         }
 
         var distanceX = (this.getVelocity().x * (msDuration/1000));

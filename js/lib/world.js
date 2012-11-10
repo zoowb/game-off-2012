@@ -13,7 +13,7 @@ function world()
     const MAX_Y_VELOCITY = 200;
 
     //The minimum X velocity a player can trvel (heading left)
-    const MIN_X_VELOCITY = -200;
+    const MIN_X_VELOCITY = -250;
 
     //The minimum Y velocity a player can trvel (heading up)
     const MIN_Y_VELOCITY = -200;

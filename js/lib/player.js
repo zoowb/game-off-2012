@@ -9,14 +9,11 @@ function player()
     //The maximum X velocity a player can trvel (heading right)
     const MAX_X_VELOCITY = 200;
 
-    //The maximum Y velocity a player can trvel (heading down)
-    const MAX_Y_VELOCITY = 200;
-
     //The minimum X velocity a player can trvel (heading left)
     const MIN_X_VELOCITY = -200;
 
     //The minimum Y velocity a player can trvel (heading up)
-    const MIN_Y_VELOCITY = -200;
+    const MIN_Y_VELOCITY = -250;
 
     /**
      * @var array An array of playables at the players disposal
@@ -195,7 +192,7 @@ function player()
         var clone    = new playable();
         var newX     = ( template.getX() - template.rect.width );
 
-        clone.setPosition(newX, template.getY());
+        clone.setPosition(newX, template.getY() - template.image.getSize()[1]);
 
         _playables.add( clone );
 
