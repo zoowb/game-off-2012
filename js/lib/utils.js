@@ -43,6 +43,7 @@ function playerCollides(playable, rect)
     {
         playable.setVelocity( playable.getVelocity().x, 0 );
         playable.rect.bottom = (rect.top - 0.1);
+        playable.setMovement('walk');
     }
     else if ( playable.rect.collideLine(bottomEdge[0], bottomEdge[1]) )
     {

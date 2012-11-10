@@ -44,6 +44,7 @@ function player()
                     if (  this.getVelocity().y === 0 )
                     {
                         this.setVelocity( this.getVelocity().x, MIN_Y_VELOCITY );
+                        this.getCurrentPlayable().setMovement('jump');
                     }
                     break;
 

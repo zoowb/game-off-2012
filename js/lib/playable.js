@@ -10,8 +10,7 @@ function playable()
     playable.superConstructor.apply(this, [0, 0]);
     this.image = gamejs.image.load('img/player.png');
 
-    var _size = this.image.getSize();
-    this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
+    this.rect = new gamejs.Rect([0, 0]);
 
     /**
      * @var int The amount of health the playable has
@@ -27,6 +26,34 @@ function playable()
      * @var float The velocity bottom to top that this playable is experiencing
      */
     var _velocityY = 0.0;
+
+
+    var _moveType = '';
+
+    this.setMovement = function( type ){
+        if ( type != _moveType )
+        {
+            var oldSize = this.image.getSize();
+
+            switch(type)
+            {
+                case 'walk':
+                    this.image.crop( new gamejs.Rect([0,0], [46,55] ));
+                    break;
+                case 'jump':
+                    this.image.crop( new gamejs.Rect([0,55], [46,69] ));
+            }
+
+            var _size        = this.image.getSize();
+            this.rect.width  = _size[0];
+            this.rect.height = _size[1];
+
+            this.rect.x += oldSize[0] - _size[0];
+            this.rect.y += oldSize[1] - _size[1];
+
+            _moveType = type;
+        }
+    }
 
     this.setPosition = function(x, y)
     {
@@ -133,6 +160,11 @@ function playable()
 
     this.update = function( msDuration )
     {
+        if ( _moveType == '' )
+        {
+            this.setMovement('walk');
+        }
+
         var distanceX = (this.getVelocity().x * (msDuration/1000));
         var distanceY = (this.getVelocity().y * (msDuration/1000));
 
