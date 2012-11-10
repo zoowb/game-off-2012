@@ -28,6 +28,10 @@ function door()
         //Update the state using the parent setState method
         door.prototype.setState.call(this, state);
     }
+
+    this.handleCollision = function( playable ){
+        playerCollides(playable, this.rect);
+    }
 }
 
 //Set the parent of the orGate to io
