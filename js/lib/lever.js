@@ -11,7 +11,8 @@ function lever()
     this.image = gamejs.image.load('img/switch.png');
     this.image.crop( new gamejs.Rect([0,0], [64,64] ));
 
-    this.rect  = new gamejs.Rect([0,0], [64, 64]);
+    var _size = this.image.getSize();
+    this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
     this.setState = function( state )
     {
