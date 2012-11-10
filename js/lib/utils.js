@@ -2,14 +2,17 @@ gamejs.Surface.prototype.crop = function ( rect )
 {
     if ( typeof(this._originalImg) == 'undefined' )
     {
-        var size = this.getSize();
-        this._originalImg = new gamejs.Surface([size[0], size[1]]);
+        var _size = this.getSize();
+        this._originalImg = new gamejs.Surface([_size[0], _size[1]]);
         
-        var originalSize = new gamejs.Rect(0, 0, size[0], size[1]);
+        var originalSize = new gamejs.Rect(0, 0, _size[0], _size[1]);
         this._originalImg.blit(this, originalSize, originalSize);
     }
 
     this.clear();
+
+    this.canvas.width = rect.width;
+    this.canvas.height = rect.height;
 
     var newPos = new gamejs.Rect([0,0], [rect.width, rect.height]);
     this.blit( this._originalImg, newPos, rect);
