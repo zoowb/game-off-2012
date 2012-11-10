@@ -103,6 +103,11 @@ function camera( world )
         return this;
     }
 
+    this.isAnimating = function()
+    {
+        return _animating;
+    }
+
     /**
      * Focuses the camera on a rectangle, with the option to track it
      * continuously and to animate the movement

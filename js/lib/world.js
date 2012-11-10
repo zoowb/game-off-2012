@@ -98,7 +98,7 @@ function world()
      */
     this.handleInput = function()
     {
-        if ( _hasLoaded )
+        if ( _hasLoaded && !_camera.isAnimating())
         {
             var self = this;
 
