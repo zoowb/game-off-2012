@@ -33,5 +33,6 @@ function andGate()
     }
 }
 
-//Set the parent of the orGate to io
+//Set the parent of the andGate to io
+include_once(['lib/io.js']);
 andGate.prototype =  new io();

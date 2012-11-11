@@ -31,4 +31,5 @@ function notGate()
 }
 
 //Set the parent of the notGate to io
+include_once(['lib/io.js']);
 notGate.prototype =  new io();

@@ -11,8 +11,7 @@ function door()
     var _size = this.image.getSize();
     this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
-    this.setState = function( state )
-    {
+    this.setState = function( state ){
         if ( state != this.getState() )
         {
             if ( state )

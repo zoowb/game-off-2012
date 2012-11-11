@@ -30,8 +30,7 @@ function player()
      */
     var _currentIndex = 0;
 
-    this.handleInput = function(event)
-    {
+    this.handleInput = function(event){
         //If a key has been pressed then check it to see if an
         //action needs taking place
         if ( event.type === gamejs.event.KEY_DOWN )

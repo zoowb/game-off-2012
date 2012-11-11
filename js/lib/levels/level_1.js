@@ -7,5 +7,5 @@
 {"type":"lever","x":350,"y": 512,"outputs":[{"type":"door", "x":800,"y":277}]},
 {"type":"tooltip","x":150,"y":500,"width":100,"height":100,"text":"Woo!"},
 {"type":"tooltip","x":390,"y":500,"width":100,"height":100,"text":"Woo 2!"},
-{"type":"goal","x":390,"y":500}
+{"type":"goal","x":890,"y":525}
 ]

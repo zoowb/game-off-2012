@@ -8,8 +8,7 @@ function block()
     var _size = this.image.getSize();
     this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
-    this.setPosition = function(x, y)
-    {
+    this.setPosition = function(x, y){
         this.rect.x = x;
         this.rect.y = y;
 

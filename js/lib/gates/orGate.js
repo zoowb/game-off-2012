@@ -35,4 +35,5 @@ function orGate()
 }
 
 //Set the parent of the orGate to io
+include_once(['lib/io.js']);
 orGate.prototype =  new io();

@@ -24,6 +24,8 @@ function world()
      */
     var _hasLoaded = false;
 
+    var _levelComplete = false;
+
     /**
      * @var camera The camera to use
      */
@@ -45,6 +47,8 @@ function world()
      * interact with
      */
     var _objects  = new gamejs.sprite.Group();
+
+    var _goals = [];
 
     /**
      * Main initiation method. Must be called before using the object
@@ -105,21 +109,26 @@ function world()
 
             //Loop through each game event (key presses mouse movements etc)
             gamejs.event.get().forEach(function(event){
-                var _currentPlayer = _p.getCurrentPlayable();
-
-                _p.handleInput(event);
-
-                if ( _p.getCurrentPlayable() != _currentPlayer )
+                if ( !_levelComplete )
                 {
-                    _camera.focusOn(_p.getCurrentPlayable().rect, true, true);
-                }
+                    var _currentPlayer = _p.getCurrentPlayable();
 
-                _objects.forEach(function(obj){
-                    if ( typeof(obj.handleInput) == 'function' )
+                    _p.handleInput(event);
+
+                    if ( _p.getCurrentPlayable() != _currentPlayer )
                     {
-                        obj.handleInput(self, event);
+                        _camera.focusOn(
+                            _p.getCurrentPlayable().rect, true, true
+                        );
                     }
-                })
+
+                    _objects.forEach(function(obj){
+                        if ( typeof(obj.handleInput) == 'function' )
+                        {
+                            obj.handleInput(self, event);
+                        }
+                    });
+                }
             });
         }
 
@@ -160,6 +169,16 @@ function world()
 
             //Modify the camera position
             _camera.update ( msDuration );
+
+            _levelComplete = true;
+            for( var i = 0; i < _goals.length; i++ )
+            {
+                if ( !_goals[i].isActive() )
+                {
+                    _levelComplete = false;
+                    break;
+                }
+            }
         }
 
         return this;
@@ -216,18 +235,22 @@ function world()
 
                     switch ( data[i]['type'] )
                     {
+                        case 'block':
                         case 'wall':
-                            obj = new block();
-                            _objects.add( obj );
-                            break;
+                            data[i]['type'] = 'block';
                         case 'lever':
-                            obj = new lever();
-                            _objects.add( obj );
-                            break;
                         case 'door':
-                            obj = new door();
+                        case 'goal':
+                            var type = data[i]['type'];
+                            obj      = new window[type]();
                             _objects.add( obj );
+
+                            if ( 'goal' === type )
+                            {
+                                _goals.push( obj );
+                            }
                             break;
+
                         case 'player':
                             obj = _p.getCurrentPlayable();
                     }
