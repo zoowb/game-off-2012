@@ -1,21 +1,21 @@
-gamejs.Surface.prototype.crop = function ( rect )
+function include_once(includes)
 {
-    if ( typeof(this._originalImg) == 'undefined' )
+    if ( typeof($('head').data('included')) == 'undefined' )
     {
-        var _size = this.getSize();
-        this._originalImg = new gamejs.Surface([_size[0], _size[1]]);
-        
-        var originalSize = new gamejs.Rect(0, 0, _size[0], _size[1]);
-        this._originalImg.blit(this, originalSize, originalSize);
+        $('head').data('included', []);
     }
 
-    this.clear();
+    for ( var i = 0; i < includes.length; i++ )
+    {
+        if ( $.inArray(includes[i], $('head').data('included')) === -1 )
+        {
+            $('head').append(
+                '<script type="text/javascript" src="js/'+includes[i]+'"></script>'
+            );
 
-    this.canvas.width = rect.width;
-    this.canvas.height = rect.height;
-
-    var newPos = new gamejs.Rect([0,0], [rect.width, rect.height]);
-    this.blit( this._originalImg, newPos, rect);
+            $('head').data('included').push(includes[i]);
+        }
+    }
 }
 
 function playerCollides(playable, rect, drag)

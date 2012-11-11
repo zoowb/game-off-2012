@@ -4,6 +4,7 @@
  *
  * @author David North
  */
+ include_once(['lib/playable.js']);
 function player()
 {
     //The maximum X velocity a player can trvel (heading right)
@@ -40,7 +41,7 @@ function player()
                 //The space key denotes a jump. The player is not allowed
                 //to jump if they are already falling or jumping
                 case gamejs.event.K_SPACE:
-                    if (  this.getVelocity().y === 0 )
+                    if ( this.getCurrentPlayable().getMovement() == 'walk' )
                     {
                         this.setVelocity( this.getVelocity().x, MIN_Y_VELOCITY );
                         this.getCurrentPlayable().setMovement('jump');

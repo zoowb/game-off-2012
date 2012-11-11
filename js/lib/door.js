@@ -34,5 +34,6 @@ function door()
     }
 }
 
-//Set the parent of the orGate to io
+//Set the parent of the door to io
+include_once(['lib/io.js']);
 door.prototype =  new io();

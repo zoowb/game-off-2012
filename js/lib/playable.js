@@ -59,6 +59,11 @@ function playable()
         }
     }
 
+    this.getMovement = function()
+    {
+        return _moveType;
+    }
+
     this.setPosition = function(x, y)
     {
         this.setX(x);

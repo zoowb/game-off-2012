@@ -8,18 +8,11 @@ gamejs.ready(function() {
 
     var display = gamejs.display.setMode([800, 600]);
 
-    $('head').append('<script type="text/javascript" src="js/lib/utils.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/camera.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/world.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/io.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/lever.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/door.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/gates/andGate.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/gates/orGate.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/gates/notGate.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/playable.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/block.js"></script>');
-    $('head').append('<script type="text/javascript" src="js/lib/player.js"></script>');
+    include_once([
+        'lib/camera.js', 'lib/world.js', 'lib/lever.js', 'lib/door.js',
+        'lib/gates/andGate.js', 'lib/gates/orGate.js', 'lib/gates/notGate.js',
+        'lib/player.js', 'lib/block.js', 'lib/goal.js'
+    ]);
 
     var mainSurface = gamejs.display.getSurface();
     var lvl         = new world();

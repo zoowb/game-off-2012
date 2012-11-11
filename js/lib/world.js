@@ -4,6 +4,7 @@
  *
  * @author David North
  */
+ include_once(['lib/camera.js','lib/player.js']);
 function world()
 {
     //The maximum X velocity a player can trvel (heading right)
