@@ -21,6 +21,8 @@ function player()
     var _playables = new gamejs.sprite.Group();
     _playables.add( new playable() );
 
+    var _walkVelocity = 0;
+
     /**
      * @var int The current index of the playable currently under the
      * players control
@@ -48,13 +50,13 @@ function player()
                 //The A key, or left arrow starts to move the player left
                 case gamejs.event.K_a:
                 case gamejs.event.K_LEFT:
-                    this.setVelocity( MIN_X_VELOCITY, this.getVelocity().y );
+                    _walkVelocity = MIN_X_VELOCITY;
                     break;
 
                 //The D key, or right arrow starts to move the player right
                 case gamejs.event.K_d:
                 case gamejs.event.K_RIGHT:
-                    this.setVelocity( MAX_X_VELOCITY, this.getVelocity().y );
+                    _walkVelocity = MAX_X_VELOCITY;
                     break;
 
                 //The C key clones a playable, so that the player can use
@@ -66,7 +68,25 @@ function player()
                 //The Tab key switches between the playables that the
                 //player can control
                 case gamejs.event.K_TAB:
+                    _walkVelocity = 0;
                     this.moveToNext();
+            }
+        }
+        else if ( event.type === gamejs.event.KEY_UP )
+        {
+            switch( event.key )
+            {
+                //The A key, or left arrow starts to move the player left
+                case gamejs.event.K_a:
+                case gamejs.event.K_LEFT:
+                    _walkVelocity = 0;
+                    break;
+
+                //The D key, or right arrow starts to move the player right
+                case gamejs.event.K_d:
+                case gamejs.event.K_RIGHT:
+                    _walkVelocity = 0;
+                    break;
             }
         }
     }
@@ -107,6 +127,11 @@ function player()
      */
     this.update = function( msDuration )
     {
+        if ( _walkVelocity )
+        {
+            this.setVelocity( _walkVelocity, this.getVelocity().y );
+        }
+
         _playables.update( msDuration );
         return this;
     }
