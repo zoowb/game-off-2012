@@ -11,9 +11,12 @@ function scorecard()
 
     if ( !($('#game_scorecard').length) )
     {
-        $('body').append('<div id="game_scorecard"></div>');
-        $('#game_scorecard').append('<p>Number of Clones: <span class="clones"></span></p>');
-        $('#game_scorecard').append('<p>Time: <span class="time"></span></p>');
+        $('body').append('<div id="game_scorecard_bg"></div>');
+        $('#game_scorecard_bg').append('<div id="game_scorecard"></div>');
+        $('#game_scorecard').append('<p>Number of Clones</p>');
+        $('#game_scorecard').append('<p class="clones">0</p>');
+        $('#game_scorecard').append('<p>Time</p>');
+        $('#game_scorecard').append('<p class="time">0</p>');
         $('#game_scorecard').append('<p><span class="score"></span></p>');
     }
 
@@ -39,15 +42,60 @@ function scorecard()
     }
 
     this.show = function(){
-        $('#game_scorecard p span.clones').text(_clones);
-        $('#game_scorecard p span.time').text(_time);
+        $('#game_scorecard p.clones').text(_clones);
+        $('#game_scorecard p.time').text(_calcTime());
 
         var score = 0;
-        $('#game_scorecard').show();
+        $('#game_scorecard_bg').fadeIn();
     }
 
     this.hide = function(){
 
+    }
+
+    var _calcTime = function(){
+        var seconds = parseInt(_timeTaken);
+        var minutes = 0;
+        var hours   = 0;
+        var days    = 0;
+        var ret     = '';
+
+        if ( seconds > 60 )
+        {
+            minutes  = (seconds % 60);
+            seconds -= (60 * minutes);
+
+            if ( minutes > 60 )
+            {
+                hours    = (minutes % 60);
+                minutes -= (60 * hours);
+
+                if ( hours > 24 )
+                {
+                    days   = (hours % 24);
+                    hours -= (24 * days);
+                }
+            }
+        }
+
+        if ( days )
+        {
+            ret = days+'d '+hours+'h';
+        }
+        else if ( hours )
+        {
+            ret = hours+'h '+minutes+'m';
+        }
+        else if ( minutes )
+        {
+            ret = minutes+'m '+seconds+'s';
+        }
+        else
+        {
+            ret = seconds+'s';
+        }
+
+        return ret;
     }
 
 }
