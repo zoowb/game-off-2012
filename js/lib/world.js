@@ -144,7 +144,7 @@ function world()
      */
     this.update = function( msDuration )
     {
-        if ( _hasLoaded )
+        if ( _hasLoaded && !_levelComplete )
         {
             //Apply the gravitational pull of the world
             _applyGravity();
