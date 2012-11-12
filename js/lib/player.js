@@ -24,6 +24,8 @@ function player()
 
     var _walkVelocity = 0;
 
+    var _numClones = 0;
+
     /**
      * @var int The current index of the playable currently under the
      * players control
@@ -63,6 +65,7 @@ function player()
                 //that instead
                 case gamejs.event.K_c:
                     this.clone();
+                    _numClones++;
                     break;
 
                 //The Tab key switches between the playables that the
@@ -89,6 +92,10 @@ function player()
                     break;
             }
         }
+    }
+
+    this.getNumClones = function(){
+        return _numClones;
     }
 
     /**

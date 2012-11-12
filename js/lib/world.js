@@ -4,7 +4,7 @@
  *
  * @author David North
  */
- include_once(['lib/camera.js','lib/player.js']);
+ include_once(['lib/camera.js','lib/player.js', 'lib/scorecard.js']);
 function world()
 {
     //The maximum X velocity a player can trvel (heading right)
@@ -25,6 +25,10 @@ function world()
     var _hasLoaded = false;
 
     var _levelComplete = false;
+
+    var _gameTime = 0;
+
+    var _scorecard = new scorecard();
 
     /**
      * @var camera The camera to use
@@ -146,6 +150,8 @@ function world()
     {
         if ( _hasLoaded && !_levelComplete )
         {
+            _gameTime += msDuration;
+
             //Apply the gravitational pull of the world
             _applyGravity();
 
@@ -178,6 +184,13 @@ function world()
                     _levelComplete = false;
                     break;
                 }
+            }
+
+            if ( _levelComplete )
+            {
+                _scorecard.setTimeTaken(_gameTime / 1000);
+                _scorecard.setClonesUsed(_p.getNumClones());
+                _scorecard.show();
             }
         }
 
@@ -214,81 +227,93 @@ function world()
         var _hasPlayer = false;
         for ( var i = 0; i < data.length; i ++)
         {
-            var xAmount = 1;
-            var yAmount = 1;
-
-            if ( typeof(data[i]['repeat-x']) != 'undefined')
+            if ( data[i]['type'] == 'stats' )
             {
-                xAmount = data[i]['repeat-x'];
+                _scorecard.setParForClones(data[i]['clonePar']);
+                _scorecard.setParForTime(data[i]['timePar']);
             }
-
-            if ( typeof(data[i]['repeat-y']) != 'undefined')
+            else
             {
-                yAmount = data[i]['repeat-y'];
-            }
+                var xAmount = 1;
+                var yAmount = 1;
 
-            for ( var x = 0; x < xAmount; x++ )
-            {
-                for ( var y = 0; y < yAmount; y++ )
+                if ( typeof(data[i]['repeat-x']) != 'undefined')
                 {
-                    var obj = null;
+                    xAmount = data[i]['repeat-x'];
+                }
 
-                    if ( 'tooltip' == data[i]['type'] )
+                if ( typeof(data[i]['repeat-y']) != 'undefined')
+                {
+                    yAmount = data[i]['repeat-y'];
+                }
+
+                for ( var x = 0; x < xAmount; x++ )
+                {
+                    for ( var y = 0; y < yAmount; y++ )
                     {
-                        obj = new tooltip();
-                        obj.setDimensions(data[i]['width'], data[i]['height']);
-                        obj.setText(data[i]['text']);
-                        _objects.add( obj );
-                    }
-                    else
-                    {
-                        switch ( data[i]['type'] )
-                        {
-                            case 'block':
-                            case 'wall':
-                                data[i]['type'] = 'block';
-                            case 'lever':
-                            case 'door':
-                            case 'goal':
-                                var type = data[i]['type'];
-                                obj      = new window[type]();
-                                _objects.add( obj );
-
-                                if ( 'goal' === type )
-                                {
-                                    _goals.push( obj );
-                                }
-                                break;
-
-                            case 'player':
-                                obj = _p.getCurrentPlayable();
-                        }
-                    }
-
-                    if ( null != obj )
-                    {
-                        if ( obj instanceof io )
-                        {
-                            if ( typeof(data[i]['outputs']) !== 'undefined' )
-                            {
-                                _loadLevel(data[i]['outputs'], obj)
-                            }
-
-                            if ( typeof(input) !== 'undefined' )
-                            {
-                                obj.addInput(input);
-                            }
-                        }
-                        var width  = obj.image.getSize()[0];
-                        var height = obj.image.getSize()[1];
-
-                        var xPos = (data[i]['x'] + (width * x));
-                        var yPos = (data[i]['y'] + (height * y));
-
-                        obj.setPosition( xPos, yPos );
+                        _addObjectToWorld(data[i], x, y, input);
                     }
                 }
             }
+        }
+    }
+
+    var _addObjectToWorld = function( data, x, y, input ){
+        var obj = null;
+
+        if ( 'tooltip' == data['type'] )
+        {
+            obj = new tooltip();
+            obj.setDimensions(data['width'], data['height']);
+            obj.setText(data['text']);
+            _objects.add( obj );
+        }
+        else
+        {
+            switch ( data['type'] )
+            {
+                case 'block':
+                case 'wall':
+                    data['type'] = 'block';
+                case 'lever':
+                case 'door':
+                case 'goal':
+                    var type = data['type'];
+                    obj      = new window[type]();
+                    _objects.add( obj );
+
+                    if ( 'goal' === type )
+                    {
+                        _goals.push( obj );
+                    }
+                    break;
+
+                case 'player':
+                    obj = _p.getCurrentPlayable();
+            }
+        }
+
+        if ( null != obj )
+        {
+            if ( obj instanceof io )
+            {
+                if ( typeof(data['outputs']) !== 'undefined' )
+                {
+                    _loadLevel(data['outputs'], obj)
+                }
+
+                if ( typeof(input) !== 'undefined' )
+                {
+                    obj.addInput(input);
+                }
+            }
+            var width  = obj.image.getSize()[0];
+            var height = obj.image.getSize()[1];
+
+            var xPos = (data['x'] + (width * x));
+            var yPos = (data['y'] + (height * y));
+
+            obj.setPosition( xPos, yPos );
         }
     }
 
