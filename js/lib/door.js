@@ -1,6 +1,5 @@
 /**
- * Simulates an AND gate in JavaScript. As an io object this can be used to
- * chain together logic operators and objects
+ * Represents a door which can be passed only when the state is set to true
  *
  * @author David North
  */

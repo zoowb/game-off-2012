@@ -1,4 +1,8 @@
-
+/**
+ * Represents a block that the player may hit
+ *
+ * @author David North
+ */
 function block()
 {
     //Load the variables required by gamejs.sprite.Sprite
