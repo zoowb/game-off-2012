@@ -15,6 +15,9 @@ function block()
     /**
      * Sets the position of the object
      *
+     * @param float x The X co-ordinate
+     * @param float y The Y co-ordinate
+     *
      * @return block
      */
     this.setPosition = function(x, y){

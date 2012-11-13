@@ -29,6 +29,9 @@ function io()
     /**
      * Sets the position of the object
      *
+     * @param float x The X co-ordinate
+     * @param float y The Y co-ordinate
+     *
      * @return io
      */
     this.setPosition = function(x, y){

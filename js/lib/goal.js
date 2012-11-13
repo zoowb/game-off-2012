@@ -21,6 +21,9 @@ function goal()
     /**
      * Sets the position of the object
      *
+     * @param float x The X co-ordinate
+     * @param float y The Y co-ordinate
+     *
      * @return goal
      */
     this.setPosition = function(x, y){
