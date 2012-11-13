@@ -6,14 +6,22 @@
  */
 function notGate()
 {
-    this.addInput = function( input )
-    {
+    /**
+     * Overrides the addInput method of the parent so that only a single
+     * input can be added to this object. This is because the NOT gate can only
+     * operate by setting itself to a modified state of it's single input
+     *
+     * @param io input The input to add
+     *
+     * @return io
+     */
+    this.addInput = function( input ){
         if ( this.getInputs().length )
         {
             throw 'You may only have one input assigned to a Not gate';
         }
 
-        notGate.prototype.addInput.call(this, input);
+        return notGate.prototype.addInput.call(this, input);
     }
 
     /**
@@ -24,9 +32,8 @@ function notGate()
      *
      * @return notGate
      */
-    this.setState = function( state )
-    {
-        notGate.prototype.setState.call(this, !state);
+    this.setState = function( state ){
+        return notGate.prototype.setState.call(this, !state);
     }
 }
 

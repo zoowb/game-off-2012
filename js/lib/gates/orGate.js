@@ -15,8 +15,7 @@ function orGate()
      *
      * @return orGate
      */
-    this.setState = function( state )
-    {
+    this.setState = function( state ){
         state = false;
 
         //Keep the state at false unless a true value is found
@@ -30,7 +29,7 @@ function orGate()
         }
 
         //Update the state using the parent setState method
-        orGate.prototype.setState.call(this, state);
+        return orGate.prototype.setState.call(this, state);
     }
 }
 

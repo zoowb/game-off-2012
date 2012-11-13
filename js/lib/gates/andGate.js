@@ -14,8 +14,7 @@ function andGate()
      *
      * @return andGate
      */
-    this.setState = function( state )
-    {
+    this.setState = function( state ){
         state = true;
 
         //Keep the state at true unless a false value is found
@@ -29,7 +28,7 @@ function andGate()
         }
 
         //Update the state using the parent setState method
-        andGate.prototype.setState.call(this, state);
+        return andGate.prototype.setState.call(this, state);
     }
 }
 
