@@ -47,7 +47,19 @@ function door()
 
         if ( !this.getState() )
         {
-            playerCollides(playable, this.rect);
+            //Modify the rectangle. The player shouldn't hit the door
+            //until they are at the beam
+            var targetX  = this.rect.x + 26;
+            var targetY  = this.rect.y; 
+
+            var targetWidth  = this.rect.width - 52;
+            var targetHeight = this.rect.height;
+
+            var rect = new gamejs.Rect(
+                [targetX, targetY], [targetWidth, targetHeight]
+            );
+
+            playerCollides(playable, rect);
         }
 
         return this;

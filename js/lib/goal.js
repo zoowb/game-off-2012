@@ -63,9 +63,17 @@ function goal()
      * @return goal
      */
     this.handleCollision = function( playable ){
-        //The player has collided with this goal, this means it
+        //Modify the rectangle. The player shouldn't end the level until
+        //they are fully within the tube
+        var targetX  = this.rect.x + (this.rect.width / 2);
+        targetX     += (playable.rect.width / 2);
+
+        var targetY  = this.rect.y; 
+        var rect     = new gamejs.Rect([targetX, targetY], [40, 144]);
+
+        //Check if the player has collided with this goal, and whether it
         //should be activated
-        _active = true;
+        _active = playable.rect.collideRect(rect);
 
         return this;
     }
