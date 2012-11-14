@@ -8,7 +8,7 @@ function goal()
 {
     //Load the variables required by gamejs.sprite.Sprite
     goal.superConstructor.apply(this, [0, 0]);
-    this.image = gamejs.image.load('img/block.png');
+    this.image = gamejs.image.load('img/goal.png');
 
     var _size = this.image.getSize();
     this.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
