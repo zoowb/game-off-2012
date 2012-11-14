@@ -63,8 +63,10 @@ function world()
      */
     this.init = function( mainSurface )
     {
-        _level.rect = new gamejs.Rect([0, 0], [0, 0]);
-        _level.image = gamejs.image.load('img/blank.png');
+        _level.image = gamejs.image.load('img/bg.png');
+
+        var _size = _level.image.getSize();
+        _level.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
 
         _camera.setWidth( mainSurface.getSize()[0] );
         _camera.setHeight( mainSurface.getSize()[1] );
