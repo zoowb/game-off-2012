@@ -309,8 +309,8 @@ function world()
                     obj.addInput(input);
                 }
             }
-            var width  = obj.image.getSize()[0];
-            var height = obj.image.getSize()[1];
+            var width  = obj.rect.width;
+            var height = obj.rect.height;
 
             var xPos = (data['x'] + (width * x));
             var yPos = (data['y'] + (height * y));
