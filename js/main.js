@@ -2,7 +2,7 @@ gamejs = require('gamejs');
 
 //Preload all the required images
 gamejs.preload([
-    'img/bg.png','img/player.png','img/block.png', 'img/blank.png'
+    'img/bg.png','img/player.png', 'img/blank.png'
     ,'img/switch.png','img/door.png','img/goal.png'
 ]);
 
