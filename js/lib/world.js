@@ -39,7 +39,50 @@ function world()
      * @var gamejs.sprite.Sprite Represents the bounding box (and background)
      * of a level
      */
-    var _level = new gamejs.sprite.Sprite();
+    var _levelSprite = new gamejs.sprite.Sprite();
+    _levelSprite.handleCollision = function(playable){
+        var rightEdge = [
+            [this.rect.right, this.rect.top],
+            [this.rect.right, this.rect.bottom]
+        ];
+
+        var leftEdge = [
+            [this.rect.left, this.rect.top],
+            [this.rect.left, this.rect.bottom]
+        ];
+
+        var topEdge = [
+            [this.rect.left, this.rect.top],
+            [this.rect.right, this.rect.top]
+        ];
+
+        var bottomEdge = [
+            [this.rect.left, this.rect.bottom],
+            [this.rect.right, this.rect.bottom]
+        ];
+
+        //Test the left and right edges, setting as appropriate
+        if ( playable.rect.collideLine(rightEdge[0], rightEdge[1]) )
+        {
+            playable.rect.right = this.rect.right;
+        }
+        else if ( playable.rect.collideLine(leftEdge[0], leftEdge[1]) )
+        {
+            playable.rect.left = this.rect.left;
+        }
+
+        //Test the top and bottom edges, setting as appropriate
+        if ( playable.rect.collideLine( topEdge[0], topEdge[1]) )
+        {
+            playable.rect.top = this.rect.top;
+        }
+        else if ( playable.rect.collideLine(bottomEdge[0], bottomEdge[1]) )
+        {
+            playable.rect.bottom = this.rect.bottom;
+        }
+    }
+
+    var _levelRect = new gamejs.Rect([0,0]);
 
     /**
      * @var player Represents the player
@@ -63,10 +106,13 @@ function world()
      */
     this.init = function( mainSurface )
     {
-        _level.image = gamejs.image.load('img/bg.png');
+        _levelSprite.image = gamejs.image.load('img/bg.png');
 
-        var _size = _level.image.getSize();
-        _level.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
+        var _size         = _levelSprite.image.getSize();
+        _levelSprite.rect = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
+        _levelRect        = new gamejs.Rect([0, 0], [_size[0], _size[1]]);
+
+        _objects.add(_levelSprite);
 
         _camera.setWidth( mainSurface.getSize()[0] );
         _camera.setHeight( mainSurface.getSize()[1] );
@@ -89,7 +135,7 @@ function world()
 
     this.getBoundingRect = function()
     {
-        return _level.rect;
+        return _levelRect;
     }
 
     this.getObjects = function()
@@ -172,9 +218,6 @@ function world()
                 }
             }
 
-            //Update the level background with any animations or amends
-            _level.update( msDuration );
-
             //Modify the camera position
             _camera.update ( msDuration );
 
@@ -208,9 +251,8 @@ function world()
     {
         if ( _hasLoaded )
         {
-            //Draw the level, collidables and non collidables, as these need to be
-            //behind the player
-            _level.draw ( mainSurface );
+            //Draw the level, collidables and non collidables, as these need
+            //to be behind the player
             _objects.draw( mainSurface );
 
             //Draw the player at the forefront of the level
