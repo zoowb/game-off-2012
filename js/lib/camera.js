@@ -6,7 +6,7 @@
 function camera( world )
 {
     //The maximum speed that the camera can move at
-    const MAX_VELOCITY = 200;
+    const MAX_VELOCITY = 300;
 
     /**
      * @var world The world that is being looked at
@@ -351,6 +351,12 @@ function camera( world )
         else if ( deltaY < 0 )
         {
             position.y = _viewport.y - ( velocityY * (msDuration / 1000) );
+        }
+
+
+        if ( position.x <= (targetX + 5) && position.x >= (targetX - 5) )
+        {
+            position.x = targetX;
         }
 
         //If the camera has reached it's target, then stop it animating
