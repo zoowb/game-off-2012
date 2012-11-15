@@ -354,9 +354,16 @@ function camera( world )
         }
 
 
+        //Check to see if the camera is close to the target. If it is, then move
+        //it to the target so that on the next frame it doesn't overshoot
         if ( position.x <= (targetX + 5) && position.x >= (targetX - 5) )
         {
             position.x = targetX;
+        }
+
+        if ( position.y <= (targetY + 5) && position.y >= (targetY - 5) )
+        {
+            position.y = targetY;
         }
 
         //If the camera has reached it's target, then stop it animating
