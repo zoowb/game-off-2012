@@ -54,9 +54,11 @@ function player()
         {
             switch( event.key )
             {
-                //The space key denotes a jump. The player is not allowed
+                //The space, w, or up key denotes a jump. The player is not allowed
                 //to jump if they are already falling or jumping
                 case gamejs.event.K_SPACE:
+                case gamejs.event.K_w:
+                case gamejs.event.K_UP:
                     if ( this.getCurrentPlayable().getMovement() == 'walk' )
                     {
                         this.setVelocity( this.getVelocity().x, MIN_Y_VELOCITY );
