@@ -5,6 +5,8 @@
  */
 function door()
 {
+    door.prototype.constructor.call(this);
+
     //Set up the variables required by the sprite inheritance
     this.image = gamejs.image.load('img/door.png');
     this.image.crop( new gamejs.Rect( [0,0], [83,466] ));

@@ -6,6 +6,8 @@
  */
 function lever()
 {
+    lever.prototype.constructor.call(this);
+
     //Fulfil the requirements of the gamejs.sprite.Sprite object
     this.image = gamejs.image.load('img/switch.png');
     this.image.crop( new gamejs.Rect( [0,0], [83,43] ));

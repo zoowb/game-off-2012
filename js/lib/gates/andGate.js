@@ -6,6 +6,8 @@
  */
 function andGate()
 {
+    andGate.prototype.constructor.call(this);
+
     /**
      * Overrides the setState method of the parent so that the state may only
      * be changed to true if all inputs are also set to true

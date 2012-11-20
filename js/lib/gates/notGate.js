@@ -6,6 +6,8 @@
  */
 function notGate()
 {
+    notGate.prototype.constructor.call(this);
+
     /**
      * Overrides the addInput method of the parent so that only a single
      * input can be added to this object. This is because the NOT gate can only

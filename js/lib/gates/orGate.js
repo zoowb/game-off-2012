@@ -6,6 +6,8 @@
  */
 function orGate()
 {
+    orGate.prototype.constructor.call(this);
+
     /**
      * Overrides the setState method of the parent so that the state may only
      * be changed to false if all inputs are also set to false. If even a single
