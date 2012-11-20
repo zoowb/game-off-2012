@@ -306,7 +306,7 @@ function world()
      * Loads the level data from an array, filling the worls with collidables
      * and ensuring it's playable
      */
-    var _loadLevel = function( data, input )
+    var _loadLevel = function( data, input, output )
     {
         var _hasPlayer = false;
         for ( var i = 0; i < data.length; i ++)
@@ -335,14 +335,14 @@ function world()
                 {
                     for ( var y = 0; y < yAmount; y++ )
                     {
-                        _addObjectToWorld(data[i], x, y, input);
+                        _addObjectToWorld(data[i], x, y, input, output);
                     }
                 }
             }
         }
     }
 
-    var _addObjectToWorld = function( data, x, y, input ){
+    var _addObjectToWorld = function( data, x, y, input, output ){
         var obj = null;
 
         if ( 'tooltip' == data['type'] )
@@ -359,6 +359,9 @@ function world()
                 case 'block':
                 case 'wall':
                     data['type'] = 'block';
+                case 'andGate':
+                case 'orGate':
+                case 'notGate':
                 case 'lever':
                 case 'door':
                 case 'goal':
@@ -386,9 +389,19 @@ function world()
                     _loadLevel(data['outputs'], obj)
                 }
 
-                if ( typeof(input) !== 'undefined' )
+                if ( typeof(data['inputs']) !== 'undefined' )
+                {
+                    _loadLevel(data['inputs'], null, obj)
+                }
+
+                if ( typeof(input) !== 'undefined' && input != null )
                 {
                     obj.addInput(input);
+                }
+
+                if ( typeof(output) !== 'undefined' && output != null )
+                {
+                    obj.addOutput(output);
                 }
             }
             var width  = obj.rect.width;
