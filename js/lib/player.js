@@ -81,8 +81,11 @@ function player()
                 //The C key clones a playable, so that the player can use
                 //that instead
                 case gamejs.event.K_c:
-                    this.clone();
-                    _numClones++;
+                    if ( _numClones < 100 )
+                    {
+                        this.clone();
+                        _numClones++;
+                    }
                     break;
 
                 //The Tab key switches between the playables that the
