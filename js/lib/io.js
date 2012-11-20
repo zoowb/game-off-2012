@@ -9,17 +9,17 @@ function io()
     /**
      * @var boolean
      */
-    var _state   = false;
+    this._state   = false;
 
     /**
      * @var array An array of inputs, that determine the state of this object
      */
-    var _inputs  = [];
+    this._inputs  = [];
 
     /**
      * @var array An array of outputs, to send the state of this object to
      */
-    var _outputs = [];
+    this._outputs = [];
 
     //Load the variables required by gamejs.sprite.Sprite
     io.superConstructor.apply(this, [0, 0]);
@@ -47,12 +47,12 @@ function io()
      *
      * @return io
      */
-    var _stateChange = function(){
+    var _stateChange = function(obj){
         //Change the state of all outputs to the new state of this object,
         //effectively causing a knock-on affect down the chain
-        for( var i = 0; i < _outputs.length; i++ )
+        for( var i = 0; i < obj.getOutputs().length; i++ )
         {
-            _outputs[i].setState( _state );
+            obj.getOutputs()[i].setState( obj.getState() );
         }
 
         return this;
@@ -74,10 +74,10 @@ function io()
         //Set the new state and set the state change event only if the state
         //has actually changed, otherwise we could waste time notifying objects
         ///that don't require notification
-        if ( state != _state )
+        if ( state != this.getState() )
         {
-            _state = state;
-            _stateChange();
+            this._state = state;
+            _stateChange(this);
         }
 
         return this;
@@ -89,7 +89,7 @@ function io()
      * @return boolean
      */
     this.getState = function(){
-        return _state;
+        return this._state;
     };
 
     /**
@@ -98,7 +98,16 @@ function io()
      * @return array
      */
     this.getInputs = function(){
-        return _inputs;
+        return this._inputs;
+    };
+
+    /**
+     * Gets the outputs assigned to this object
+     *
+     * @return array
+     */
+    this.getOutputs = function(){
+        return this._outputs;
     };
 
     /**
@@ -117,9 +126,9 @@ function io()
 
         //Ensure that the input has not already been added. We don't want to
         //attempt to add it again, that's just damned inefficient
-        if ( $.inArray(input, _inputs) == -1 )
+        if ( $.inArray(input, this._inputs) == -1 )
         {
-            _inputs.push(input);
+            this._inputs.push(input);
             input.addOutput(this);   
         }
 
@@ -142,9 +151,9 @@ function io()
 
         //Ensure that the output has not already been added. We don't want to
         //attempt to add it again, that would be silly
-        if ( $.inArray(output, _outputs) == -1 )
+        if ( $.inArray(output, this._outputs) == -1 )
         {
-            _outputs.push(output);
+            this._outputs.push(output);
             output.addInput(this);
         }
 
