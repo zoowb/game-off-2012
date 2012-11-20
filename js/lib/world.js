@@ -52,9 +52,9 @@ function world()
      * @var gamejs.sprite.Group Represents all objects a player can
      * interact with
      */
-    var _objects  = new gamejs.sprite.Group();
+    var _objects;
 
-    var _goals = [];
+    var _goals;
 
     _levelSpriteCollission = function(playable){
         var rightEdge = [
@@ -139,12 +139,18 @@ function world()
     this.clear = function(){
         if ( _objects instanceof  gamejs.sprite.Group )
         {
-            _objects.forEach(function(){
-                if ( typeof(this.hide) == 'function' )
+            while( _objects.sprites().length )
+            {
+                var sprite = _objects.sprites()[0];
+
+                if ( typeof(sprite.hide) == 'function' )
                 {
-                    this.hide();
+                    sprite.hide();
                 }
-            });
+
+                sprite.kill();
+                sprite.remove(_objects);
+            };
         }
 
         if ( _scorecard instanceof scorecard )
