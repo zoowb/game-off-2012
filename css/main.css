@@ -36,7 +36,7 @@
     top:100px;
     left:200px;
     width:400px;
-    height:200px;
+    height:280px;
     z-index: 999;
     padding-top:10px;
     text-shadow: 0 2px 0 #FFFFFF;
@@ -58,4 +58,22 @@
     margin-top:2px;
     font-size: 30px;
     padding-bottom:10px;
+}
+
+#game_scorecard #nextLevel
+{
+    position:relative;
+    background-image:url(../img/next.png);
+    background-repeat:no-repeat;
+    border:1px solid grey;
+    border-bottom:1px solid black;
+    width:64px;
+    height:64px;
+    display:block;
+    font-size:-1px;
+    text-indent:-9999px;
+    outline: none;
+    left:310px;
+    top:-10px;
+    border-radius:10px;
 }
