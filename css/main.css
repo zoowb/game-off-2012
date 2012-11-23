@@ -60,11 +60,9 @@
     padding-bottom:10px;
 }
 
-#game_scorecard #nextLevel
+#game_scorecard .nextLevel,
+#game_scorecard .resetLevel
 {
-    position:relative;
-    background-image:url(../img/next.png);
-    background-repeat:no-repeat;
     border:1px solid grey;
     border-bottom:1px solid black;
     width:64px;
@@ -73,7 +71,21 @@
     font-size:-1px;
     text-indent:-9999px;
     outline: none;
+    border-radius:10px;
+    background-repeat:no-repeat;
+    position:relative;
+}
+
+#game_scorecard .nextLevel
+{
+    background-image:url(../img/next.png);
     left:310px;
     top:-10px;
-    border-radius:10px;
+}
+
+#game_scorecard .resetLevel
+{
+    background-image:url(../img/reset.png);
+    left:167px;
+    top:-75px;
 }

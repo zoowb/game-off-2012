@@ -18,7 +18,8 @@ function scorecard()
         $('#game_scorecard').append('<p>Time</p>');
         $('#game_scorecard').append('<p class="time">0</p>');
         $('#game_scorecard').append('<p><span class="score"></span></p>');
-        $('#game_scorecard').append('<a id="nextLevel" href="#">Next Level</a>');
+        $('#game_scorecard').append('<a class="nextLevel" href="#">Next Level</a>');
+        $('#game_scorecard').append('<a class="resetLevel" href="#">Reset Level</a>');
     }
 
     this.setParForClones = function( par ){
