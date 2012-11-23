@@ -16,7 +16,8 @@ gamejs.ready(function() {
     include_once([
         'lib/camera.js', 'lib/world.js', 'lib/lever.js', 'lib/door.js',
         'lib/gates/andGate.js', 'lib/gates/orGate.js', 'lib/gates/notGate.js',
-        'lib/player.js', 'lib/block.js', 'lib/goal.js', 'lib/tooltip.js '
+        'lib/player.js', 'lib/block.js', 'lib/goal.js', 'lib/tooltip.js',
+        'lib/platform.js'
     ]);
 
     var mainSurface = gamejs.display.getSurface();
