@@ -36,7 +36,7 @@
     top:100px;
     left:200px;
     width:400px;
-    height:280px;
+    height:370px;
     z-index: 999;
     padding-top:10px;
     text-shadow: 0 2px 0 #FFFFFF;
@@ -50,6 +50,28 @@
     text-align: center;
     margin-bottom:2px;
     margin-top:10px;
+}
+
+#game_scorecard .score
+{
+    float:left;
+    padding-left:100px;
+    position:relative;
+    top:-15px;
+}
+
+#game_scorecard .score .star
+{
+    width:64px;
+    height:64px;
+    background-image:url(../img/star-off.png);
+    background-repeat: no-repeat;
+    float:left;
+}
+
+#game_scorecard .score .star.enabled
+{
+    background-image:url(../img/star-on.png);
 }
 
 #game_scorecard p.clones, #game_scorecard p.time
@@ -80,12 +102,12 @@
 {
     background-image:url(../img/next.png);
     left:310px;
-    top:-10px;
+    top:80px;
 }
 
 #game_scorecard .resetLevel
 {
     background-image:url(../img/reset.png);
     left:167px;
-    top:-75px;
+    top:15px;
 }

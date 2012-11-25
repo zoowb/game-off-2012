@@ -48,6 +48,35 @@ function scorecard()
         $('#game_scorecard p.time').text(_calcTime());
 
         var score = 0;
+
+        if ( _timeTaken <= (_timePar * 2) )
+        {
+            score++;
+        }
+
+        if ( _clones <= _clonePar )
+        {
+            score++;
+        }
+
+        if ( _timeTaken <= _timePar )
+        {
+            score++;
+        }
+
+        $('#game_scorecard .score .star').remove();
+
+        for ( var i = 1; i <= 3; i++ )
+        {
+            var star = $('<div class="star"></div>');
+            if ( score >= i )
+            {
+                star.addClass('enabled');
+            }
+
+            $('#game_scorecard .score').append(star);
+        }
+
         $('#game_scorecard_bg').fadeIn();
     }
 
