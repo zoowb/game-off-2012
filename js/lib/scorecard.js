@@ -44,8 +44,8 @@ function scorecard()
     }
 
     this.show = function(){
-        $('#game_scorecard p.clones').text(_clones);
-        $('#game_scorecard p.time').text(_calcTime());
+        $('#game_scorecard .clones').text(_clones);
+        $('#game_scorecard .time').text(_calcTime());
 
         var score = 0;
 
