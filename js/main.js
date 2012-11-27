@@ -36,5 +36,6 @@ gamejs.ready(function() {
         mainWindow.draw( mainSurface );
     };
 
+    $('#preload').remove();
     gamejs.time.fpsCallback(tick, self, 60);
 });
