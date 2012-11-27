@@ -13,13 +13,13 @@ function scorecard()
     {
         $('body').append('<div id="game_scorecard_bg"></div>');
         $('#game_scorecard_bg').append('<div id="game_scorecard"></div>');
-        $('#game_scorecard').append('<p>Number of Clones</p>');
-        $('#game_scorecard').append('<p class="clones">0</p>');
-        $('#game_scorecard').append('<p>Time</p>');
-        $('#game_scorecard').append('<p class="time">0</p>');
-        $('#game_scorecard').append('<p><span class="score"></span></p>');
-        $('#game_scorecard').append('<a class="nextLevel" href="#">Next Level</a>');
+        $('#game_scorecard').append('<h1>Results</h1>');
+        $('#game_scorecard').append('<p>Number of Clones<span class="clones">0</span></p>');
+        $('#game_scorecard').append('<p>Time<span class="time">0s</span></p>');
+        $('#game_scorecard').append('<p class="scoreholder">Score<span class="score"></span></p>');
+        $('#game_scorecard').append('<a class="mainMenu" href="#">Main Menu</a>');
         $('#game_scorecard').append('<a class="resetLevel" href="#">Reset Level</a>');
+        $('#game_scorecard').append('<a class="nextLevel" href="#">Next Level</a>');
     }
 
     this.setParForClones = function( par ){
