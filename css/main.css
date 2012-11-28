@@ -177,3 +177,14 @@ canvas
     top:-160px;
     margin-left:198px;
 }
+
+#game_scorecard .disabled
+{
+    opacity:0.5;
+}
+
+#game_scorecard .disabled:hover
+{
+    cursor: default;
+    background-position: 0px 0px;
+}
