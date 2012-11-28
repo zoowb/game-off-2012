@@ -70,6 +70,7 @@ gamejs.ready(function() {
 
     //Remove the loading bar
     $('#preload').remove();
+    $('#gameWindow').show();
 
     //Set up the tick function, run at 60fps
     gamejs.time.fpsCallback(tick, self, 60);
