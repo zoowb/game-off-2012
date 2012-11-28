@@ -138,29 +138,31 @@ canvas
 
 #game_scorecard .nextLevel
 {
-    background-image:url(../img/next-off.png);
+    background-image:url(../img/next-button.png);
     width:180px;
     height:92px;
     top:-313px;
     margin-left:277px;
+    background-position: 0px 0px;
 }
 
 #game_scorecard .nextLevel:hover
 {
-    background-image:url(../img/next-on.png);
+    background-position: -190px 0px;
 }
 
 #game_scorecard .mainMenu
 {
-    background-image:url(../img/menu-off.png);
+    background-image:url(../img/menu-button.png);
     width:180px;
     height:92px;
     margin-left:28px;
+    background-position: 0px 0px;
 }
 
 #game_scorecard .mainMenu:hover
 {
-    background-image:url(../img/menu-on.png);
+    background-position: -190px 0px;
 }
 
 #game_scorecard .resetLevel
