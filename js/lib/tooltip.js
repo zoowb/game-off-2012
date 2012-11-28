@@ -55,6 +55,7 @@ function tooltip()
             $('#game_tooltip').hide();
         }
 
+
         tooltip.timer = null;
     }
 

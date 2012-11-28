@@ -63,7 +63,6 @@ gamejs.ready(function() {
                     $('#game_scorecard .resetLevel').click();
                     event.preventDefault();
                     break;
-
             }
         }
     });
