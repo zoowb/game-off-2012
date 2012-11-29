@@ -25,6 +25,16 @@ canvas
    box-shadow:         0 0 10px #000000;
 }
 
+#gameEnd
+{
+    position:relative;
+    display:none;
+    width:800px;
+    height:600px;
+    background-image:url('../img/end.png');
+    top:-604px;
+}
+
 #preload
 {
     padding-top:250px;
