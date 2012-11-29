@@ -18,3 +18,15 @@ Control Alge by using the following keys:
  * W, Up arrow or Space to jump
  * E or Enter to activate or deactivate a switch
  * C to clone Alge
+
+##Browser Compatibility
+
+Tested in Firefox Safari, and Chrome on Windows, Linux and Mac.
+
+##Technology Used
+
+ * HTML5
+ * JavaScript
+ * [GameJs](http://gamejs.org/)
+
+##Screenshots
