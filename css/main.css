@@ -1,6 +1,7 @@
 body
 {
     background-color:#ECECEC;
+    overflow:hidden;
 }
 
 #preload, #gameWindow
