@@ -7,7 +7,7 @@
     ]},
     {
         "type":"tooltip","x":150,"y":641,"width":50,"height":50,
-        "text":"Press the <span class='button left'>left</span> arrow or <span class='button a'>a</span> to move left<br>Press the <span class='button right'>right</span> arrow or <span class='button d'>d</span> to move right"
+        "text":"왼쪽으로 이동하려면 <span class='button left'>왼쪽</span> 화살표 혹은 <span class='button a'>a</span> 를 누르세요 <br> 오른쪽으로 이동하려면 <span class='button right'>오른쪽</span> 화살표 혹은 <span class='button d'>d</span> to move right"
     },
     {
         "type":"tooltip","x":350,"y":641,"width":50,"height":50,
